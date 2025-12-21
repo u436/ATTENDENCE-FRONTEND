@@ -25,6 +25,8 @@ export const AppProvider = ({ children }) => {
   // dateTimetableOverride: map specific date-day to use another weekday's timetable (e.g., Sunday uses Monday timetable for 2025-12-21)
   // Format: { "YYYY-MM-DD-Day": "Monday" }
   const [dateTimetableOverride, setDateTimetableOverride] = useState({});
+  // setupCompleted: tracks if user has completed the initial setup (uploaded timetable)
+  const [setupCompleted, setSetupCompleted] = useState(false);
 
   // Hydrate from localStorage on load
   useEffect(() => {
@@ -41,6 +43,7 @@ export const AppProvider = ({ children }) => {
         setAttendanceHistory(parsed.attendanceHistory || {});
         setAttendanceDetailByDate(parsed.attendanceDetailByDate || {});
         setDateTimetableOverride(parsed.dateTimetableOverride || {});
+        setSetupCompleted(parsed.setupCompleted || false);
         if (parsed.date && parsed.day && parsed.timetablesByDay) {
           const key = parsed.day; // Use weekday as key
           if (parsed.timetablesByDay[key]) {
@@ -55,9 +58,9 @@ export const AppProvider = ({ children }) => {
 
   // Persist to localStorage when date/day or timetables change
   useEffect(() => {
-    const payload = { date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride };
+    const payload = { date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride, setupCompleted };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  }, [date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride]);
+  }, [date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride, setupCompleted]);
 
   // Auto-select timetable for the current date/day if available
   useEffect(() => {
@@ -105,6 +108,8 @@ export const AppProvider = ({ children }) => {
         setAttendanceDetailByDate,
         dateTimetableOverride,
         setDateTimetableOverride,
+        setupCompleted,
+        setSetupCompleted,
       }}
     >
       {children}

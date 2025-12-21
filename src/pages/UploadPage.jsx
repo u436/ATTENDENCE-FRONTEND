@@ -5,7 +5,7 @@ import "./UploadPage.css";
 import API_BASE from "../utils/config";
 
 function UploadPage() {
-	const { date, day, setDate, setDay, setTimetable, setTimetablesByDay, setHolidayMessage, setHolidayByDay, timetablesByDay, holidayByDate, setHolidayByDate, holidayByDay } = useContext(AppContext);
+	const { date, day, setDate, setDay, setTimetable, setTimetablesByDay, setHolidayMessage, setHolidayByDay, timetablesByDay, holidayByDate, setHolidayByDate, holidayByDay, setSetupCompleted } = useContext(AppContext);
 	const navigate = useNavigate();
 
 	// Check if timetable already exists for this day (means we're in "change mode" from Settings)
@@ -86,6 +86,7 @@ function UploadPage() {
 			setShowHolidayModal(false);
 			setShowSubjectConfigModal(true);
 		} else {
+			setSetupCompleted(true);
 			setSubjects([""]);
 			setTempSubjects([]);
 			setSelectedHolidays([]);
@@ -163,6 +164,9 @@ function UploadPage() {
 		setTimetablesByDay((prev) => ({ ...prev, ...newTimetablesByDay }));
 		// Set current day's timetable for display
 		setTimetable(newTimetablesByDay[day] || []);
+
+		// Mark setup as completed (user has now uploaded/added timetable)
+		setSetupCompleted(true);
 
 		// Reset state
 		setShowDaySelectionModal(false);
@@ -313,6 +317,7 @@ function UploadPage() {
 					const msg = data.message || `No classes for ${day}`;
 					setHolidayMessage(msg);
 					setHolidayByDay((prev) => ({ ...prev, [key]: msg }));
+					setSetupCompleted(true);
 					navigate("/timetable");
 					return;
 				}
@@ -406,6 +411,7 @@ function UploadPage() {
 		const key = day;
 		setTimetablesByDay((prev) => ({ ...prev, [key]: updatedRows }));
 		setTimetable(updatedRows);
+		setSetupCompleted(true);
 		setElectiveModalOpen(false);
 		setPendingTimetable(null);
 		setElectiveSlots([]);
