@@ -26,15 +26,19 @@ function UploadPage() {
 
 	if (!date || !day) return <p>Please select date and day first.</p>;
 
-	// Load existing subjects for current day on mount
+	// Load existing subjects for current day on mount (only when changing existing timetable)
 	useEffect(() => {
-		if (timetablesByDay && timetablesByDay[day]) {
-			const existingSubjects = timetablesByDay[day].map(t => t.subject || "");
+		// Only load existing subjects if we're in "change mode" (timetable already exists for this day)
+		if (isChangingMode && timetablesByDay && timetablesByDay[day]) {
+			const existingSubjects = timetablesByDay[day].map(t => t.subject || "").filter(s => s.trim().length > 0);
 			if (existingSubjects.length > 0) {
-				setSubjects(existingSubjects.length > 0 ? existingSubjects : [""]);
+				setSubjects(existingSubjects);
 			}
+		} else if (option === "add" && !isChangingMode) {
+			// For new users, reset to single empty box when opening "Add Subjects"
+			setSubjects([""]);
 		}
-	}, [day, timetablesByDay]);
+	}, [day, timetablesByDay, isChangingMode, option]);
 
 	// Load existing holidays when modal opens
 	useEffect(() => {
