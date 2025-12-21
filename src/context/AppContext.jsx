@@ -4,6 +4,8 @@ import { createContext, useEffect, useState } from "react";
 export const AppContext = createContext();
 
 const STORAGE_KEY = "timetable_app_state";
+const VERSION_KEY = "timetable_app_version";
+const CURRENT_VERSION = "2.0"; // Updated version to clear old cached subjects
 
 export const AppProvider = ({ children }) => {
   const [date, setDate] = useState("");
@@ -31,6 +33,15 @@ export const AppProvider = ({ children }) => {
   // Hydrate from localStorage on load
   useEffect(() => {
     try {
+      // Check version - if mismatch, clear old data
+      const savedVersion = localStorage.getItem(VERSION_KEY);
+      if (savedVersion !== CURRENT_VERSION) {
+        console.log('Version mismatch - clearing old data');
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+        return; // Skip loading old data
+      }
+
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
