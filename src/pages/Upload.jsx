@@ -8,7 +8,7 @@ function UploadPage() {
   const navigate = useNavigate();
 
   const [option, setOption] = useState(null); // "upload" or "add"
-  const [subjects, setSubjects] = useState([""]);
+  const [subjects, setSubjects] = useState([]);
   const [file, setFile] = useState(null);
 
   if (!date || !day) return <p>Please select date and day first.</p>;

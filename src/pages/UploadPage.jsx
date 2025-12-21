@@ -12,7 +12,7 @@ function UploadPage() {
 	const isChangingMode = timetablesByDay && timetablesByDay[day];
 
 	const [option, setOption] = useState(null); // "upload" or "add"
-	const [subjects, setSubjects] = useState([""]);
+	const [subjects, setSubjects] = useState([]);
 	const [file, setFile] = useState(null);
 	const [showHolidayModal, setShowHolidayModal] = useState(false);
 	const [selectedHolidays, setSelectedHolidays] = useState([]);
@@ -35,8 +35,8 @@ function UploadPage() {
 				setSubjects(existingSubjects);
 			}
 		} else if (option === "add" && !isChangingMode) {
-			// For new users, reset to single empty box when opening "Add Subjects"
-			setSubjects([""]);
+			// For new users, reset to empty array when opening "Add Subjects"
+			setSubjects([]);
 		}
 	}, [day, timetablesByDay, isChangingMode, option]);
 
@@ -91,7 +91,7 @@ function UploadPage() {
 			setShowSubjectConfigModal(true);
 		} else {
 			setSetupCompleted(true);
-			setSubjects([""]);
+			setSubjects([]);
 			setTempSubjects([]);
 			setSelectedHolidays([]);
 			setShowHolidayModal(false);
@@ -103,7 +103,7 @@ function UploadPage() {
 	const handleRemoveSubjectField = (index) => {
 		setSubjects((prev) => {
 			const updated = prev.filter((_, i) => i !== index);
-			return updated.length > 0 ? updated : [""];
+			return updated;
 		});
 	};
 
@@ -178,7 +178,7 @@ function UploadPage() {
 		setSubjectDayConfig({});
 		setDaySelections({});
 		setCurrentDayForSelection(0);
-		setSubjects([""]);
+		setSubjects([]);
 		setTempSubjects([]);
 		setSelectedHolidays([]);
 		setHolidayMessage("");
@@ -792,7 +792,7 @@ function UploadPage() {
 								setShowSubjectConfigModal(false);
 								setPendingSubjects([]);
 								setSubjectDayConfig({});
-								setSubjects([""]);
+								setSubjects([]);
 								setTempSubjects([]);
 							}}
 							style={{
