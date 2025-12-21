@@ -51,12 +51,8 @@ function DatePage() {
     }
 
     setDate(selectedDate.toISOString().split("T")[0]);
-    
-    // If coming from Settings (changing date only), keep the same day (weekday)
-    // Otherwise, set the new day
-    if (!fromSettings) {
-      setDay(dayFromDate);
-    }
+    // Always align the weekday to the selected date
+    setDay(dayFromDate);
 
     // If changing date from Settings, go back to timetable. Otherwise go to upload
     navigate(fromSettings ? "/timetable" : "/upload");

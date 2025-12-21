@@ -19,6 +19,12 @@ export const AppProvider = ({ children }) => {
   // attendanceHistory: tracks present/absent per date per subject for monthly stats
   // Format: { "YYYY-MM-DD": { "subject1": "present", "subject2": "absent" } }
   const [attendanceHistory, setAttendanceHistory] = useState({});
+  // attendanceDetailByDate: per-date per-row attendance detail with weights
+  // Format: { "YYYY-MM-DD": { [rowIndex]: { subject: string, status: "present"|"absent", weight: number } } }
+  const [attendanceDetailByDate, setAttendanceDetailByDate] = useState({});
+  // dateTimetableOverride: map specific date-day to use another weekday's timetable (e.g., Sunday uses Monday timetable for 2025-12-21)
+  // Format: { "YYYY-MM-DD-Day": "Monday" }
+  const [dateTimetableOverride, setDateTimetableOverride] = useState({});
 
   // Hydrate from localStorage on load
   useEffect(() => {
@@ -33,6 +39,8 @@ export const AppProvider = ({ children }) => {
         setHolidayByDay(parsed.holidayByDay || {});
         setHolidayByDate(parsed.holidayByDate || {});
         setAttendanceHistory(parsed.attendanceHistory || {});
+        setAttendanceDetailByDate(parsed.attendanceDetailByDate || {});
+        setDateTimetableOverride(parsed.dateTimetableOverride || {});
         if (parsed.date && parsed.day && parsed.timetablesByDay) {
           const key = parsed.day; // Use weekday as key
           if (parsed.timetablesByDay[key]) {
@@ -47,24 +55,32 @@ export const AppProvider = ({ children }) => {
 
   // Persist to localStorage when date/day or timetables change
   useEffect(() => {
-    const payload = { date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory };
+    const payload = { date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  }, [date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory]);
+  }, [date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride]);
 
   // Auto-select timetable for the current date/day if available
   useEffect(() => {
     if (!date || !day) return;
-    // Use day as key (not date-day) so same timetable applies to all instances of that weekday
-    if (timetablesByDay[day]) {
+    console.log('AppContext: Loading timetable for day:', day);
+    console.log('Available timetablesByDay keys:', Object.keys(timetablesByDay));
+    const dateKey = `${date}-${day}`;
+    // If there is a date-specific override, use that weekday's timetable
+    const overrideDay = dateTimetableOverride[dateKey];
+    if (overrideDay && timetablesByDay[overrideDay]) {
+      console.log('Using override timetable from', overrideDay, 'for', dateKey);
+      setTimetable(timetablesByDay[overrideDay]);
+    } else if (timetablesByDay[day]) {
+      console.log('Found timetable for', day, ':', timetablesByDay[day]);
       setTimetable(timetablesByDay[day]);
     } else {
+      console.log('No timetable found for', day);
       setTimetable([]);
     }
     // Check for specific date holiday first, then recurring holiday
-    const dateKey = `${date}-${day}`;
     const msg = holidayByDate[dateKey] || holidayByDay[day] || "";
     setHolidayMessage(msg);
-  }, [date, day, timetablesByDay, holidayByDay, holidayByDate]);
+  }, [date, day, timetablesByDay, holidayByDay, holidayByDate, dateTimetableOverride]);
 
   return (
     <AppContext.Provider
@@ -85,6 +101,10 @@ export const AppProvider = ({ children }) => {
         setHolidayByDate,
         attendanceHistory,
         setAttendanceHistory,
+        attendanceDetailByDate,
+        setAttendanceDetailByDate,
+        dateTimetableOverride,
+        setDateTimetableOverride,
       }}
     >
       {children}
