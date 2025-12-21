@@ -1,0 +1,33 @@
+.custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.month-name {
+  color: #00d4ff;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.custom-year-dropdown {
+  max-height: 150px;
+  overflow-y: scroll;
+  background-color: #3a3a5c;
+  border-radius: 6px;
+  padding: 5px;
+}
+
+.year-option {
+  color: #00d4ff;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.year-option:hover {
+  background-color: #00d4ff;
+  color: #000;
+  border-radius: 4px;
+}
