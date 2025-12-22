@@ -169,14 +169,14 @@ function Reports() {
   const holidayDates = useMemo(() => Object.keys(holidayByDate || {}).sort(), [holidayByDate]);
 
   return (
-    <div className="centered-card reports-container" style={{ maxWidth: 900 }}>
-      <div style={{ display: "flex", gap: "10px", marginBottom: 12, justifyContent: "space-between", alignItems: "center" }} className="reports-buttons">
+    <div className="centered-card reports-container">
+      <div style={{ display: "flex", gap: "8px", marginBottom: 6, justifyContent: "center", alignItems: "center" }} className="reports-buttons">
         <button onClick={() => navigate("/timetable")}>← Back</button>
         <button onClick={() => navigate("/")}>Home</button>
       </div>
-      <h2>Reports</h2>
-      <p style={{ color: "#607d8b", marginTop: -4 }}>Pick a day/month and (optionally) a subject filter.</p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, alignItems: "center", marginBottom: 12 }} className="reports-input-grid">
+      <h2 style={{ margin: "0 0 6px 0" }}>Reports</h2>
+      <p style={{ color: "#607d8b", margin: "0 0 8px 0" }}>Pick a day/month and (optionally) a subject filter.</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, alignItems: "center", marginBottom: 8 }} className="reports-input-grid">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ fontSize: 12, color: "#5c6f82", fontWeight: 600 }}>Year (YYYY)</label>
           <input 
@@ -220,8 +220,8 @@ function Reports() {
         </div>
       </div>
 
-      <h3 style={{ marginTop: 0, marginBottom: 0 }}>Today - Attendance by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
+      <h3 style={{ margin: "8px 0 4px 0" }}>Today - Attendance by Subject</h3>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
@@ -244,8 +244,8 @@ function Reports() {
         )}
       </div>
 
-      <h3 style={{ marginTop: 0, marginBottom: 0 }}>Today - Average by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
+      <h3 style={{ margin: "8px 0 4px 0" }}>Today - Average by Subject</h3>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
@@ -272,8 +272,8 @@ function Reports() {
         )}
       </div>
 
-      <h3 style={{ marginTop: 0, marginBottom: 0 }}>This Month - Attendance by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
+      <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Attendance by Subject</h3>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
@@ -296,8 +296,8 @@ function Reports() {
         )}
       </div>
 
-      <h3 style={{ marginTop: 0, marginBottom: 0 }}>This Month - Average by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
+      <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Average by Subject</h3>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
@@ -325,8 +325,8 @@ function Reports() {
       </div>
 
       {/* Holiday List */}
-      <h3 style={{ marginTop: 16 }}>🌴 Holidays</h3>
-      <div className="holiday-list" style={{ maxHeight: 240, overflowY: "auto", border: "2px solid #ff9800", borderRadius: 8, padding: 12, backgroundColor: "#fff7e6" }}>
+      <h3 style={{ margin: "8px 0 4px 0" }}>🌴 Holidays</h3>
+      <div className="holiday-list" style={{ maxHeight: 240, overflowY: "auto", padding: 8, backgroundColor: "#fff7e6" }}>
         {holidayDates.length === 0 ? (
           <p style={{ color: "#c26600" }}>No holidays marked.</p>
         ) : (

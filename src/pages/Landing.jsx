@@ -20,6 +20,7 @@ function Landing() {
     setDateTimetableOverride,
     setSetupCompleted
   } = useContext(AppContext);
+  const hasTimetable = setupCompleted || (timetablesByDay && Object.keys(timetablesByDay).length > 0);
   
   const handleContinueSetup = () => {
     // First time user - go through setup: Date → Upload → Timetable
@@ -63,44 +64,70 @@ function Landing() {
     setAttendanceDetailByDate({});
     setDateTimetableOverride({});
     setSetupCompleted(false);
+    // Remove persisted state and version to ensure a clean start
     localStorage.removeItem("timetable_app_state");
+    localStorage.removeItem("timetable_app_version");
     // Navigate to date page to start fresh
     navigate("/date");
   };
   
   return (
     <div className="centered-card">
-      <h1>ATTENDANCE TRACKER</h1>
-      {setupCompleted ? (
-        <>
-          <p style={{ color: "#666", marginTop: "10px" }}>Welcome back! You have saved data.</p>
-          <button onClick={handleContinue} style={{ marginTop: "20px", marginRight: "10px" }}>
-            Continue →
-          </button>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+        <h1 style={{ margin: 0 }}>ATTENDANCE TRACKER</h1>
+      {hasTimetable ? (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%" }}>
           <button 
-            onClick={handleStartFresh} 
+            onClick={handleContinue}
             style={{ 
-              marginTop: "20px", 
-              backgroundColor: "#f44336",
+              backgroundColor: "#2196F3",
               color: "white",
               padding: "12px 20px",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "6px",
               cursor: "pointer",
-              fontWeight: "600"
+              fontWeight: 600,
+              width: "min(95vw, 320px)"
             }}
           >
-            🔄 Start Fresh
+            Continue →
           </button>
-        </>
+          <button 
+            onClick={handleStartFresh}
+            style={{ 
+              backgroundColor: "#2196F3",
+              color: "white",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: 600,
+              width: "min(95vw, 320px)"
+            }}
+          >
+            Start New Timetable →
+          </button>
+        </div>
       ) : (
-        <>
-          <p style={{ color: "#666", marginTop: "10px" }}>Let's get started! Set up your timetable.</p>
-          <button onClick={handleContinueSetup} style={{ marginTop: "20px" }}>
-            Get Started →
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%" }}>
+          <button 
+            onClick={handleContinueSetup}
+            style={{ 
+              backgroundColor: "#2196F3",
+              color: "white",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: 600,
+              width: "min(95vw, 320px)"
+            }}
+          >
+            Continue →
           </button>
-        </>
+        </div>
       )}
+      </div>
     </div>
   );
 }

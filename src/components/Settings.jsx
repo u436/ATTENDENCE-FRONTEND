@@ -1,10 +1,13 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import { getNotificationTime, setNotificationTime, requestNotificationPermission } from "../utils/notifications";
 
 function Settings({ isOpen, onClose }) {
 	const navigate = useNavigate();
 	const { setDate, setDay } = useContext(AppContext);
+	const [notificationTime, setLocalNotificationTime] = useState(getNotificationTime());
+	const [showNotificationSettings, setShowNotificationSettings] = useState(false);
 
 	const handleChangeDate = () => {
 		// Navigate to date selection page with flag to return to timetable (not upload)
@@ -16,6 +19,17 @@ function Settings({ isOpen, onClose }) {
 		// Go to upload page to choose mode (upload image or add subjects)
 		navigate("/upload", { replace: true });
 		onClose();
+	};
+
+	const handleSaveNotificationTime = async () => {
+		const granted = await requestNotificationPermission();
+		if (granted) {
+			setNotificationTime(notificationTime);
+			alert(`Daily reminder set for ${notificationTime}`);
+			setShowNotificationSettings(false);
+		} else {
+			alert("Please enable notifications in your browser settings to use this feature.");
+		}
 	};
 
 	if (!isOpen) return null;
@@ -91,6 +105,69 @@ function Settings({ isOpen, onClose }) {
 				>
 					⚙️ Change Timetable Mode
 				</button>
+				<button
+					onClick={() => setShowNotificationSettings(!showNotificationSettings)}
+					style={{
+						display: "block",
+						width: "100%",
+						padding: "15px",
+						marginBottom: "10px",
+						backgroundColor: "#ff9800",
+						color: "white",
+						border: "none",
+						borderRadius: "5px",
+						fontSize: "16px",
+						fontWeight: "600",
+						cursor: "pointer",
+						transition: "background-color 0.3s",
+					}}
+					onMouseEnter={(e) => (e.target.style.backgroundColor = "#e68900")}
+					onMouseLeave={(e) => (e.target.style.backgroundColor = "#ff9800")}
+				>
+					🔔 Notification Settings
+				</button>
+				{showNotificationSettings && (
+					<div style={{
+						backgroundColor: "#f8f9fa",
+						padding: "15px",
+						borderRadius: "8px",
+						marginBottom: "10px",
+						textAlign: "left"
+					}}>
+						<label style={{ display: "block", marginBottom: "8px", fontWeight: "600", fontSize: "14px" }}>
+							Daily Reminder Time:
+						</label>
+						<input
+							type="time"
+							value={notificationTime}
+							onChange={(e) => setLocalNotificationTime(e.target.value)}
+							style={{
+								width: "100%",
+								padding: "10px",
+								borderRadius: "5px",
+								border: "1px solid #ced4da",
+								fontSize: "14px",
+								marginBottom: "10px"
+							}}
+						/>
+						<button
+							onClick={handleSaveNotificationTime}
+							style={{
+								width: "100%",
+								padding: "10px",
+								backgroundColor: "#28a745",
+								color: "white",
+								border: "none",
+								borderRadius: "5px",
+								fontSize: "14px",
+								fontWeight: "600",
+								cursor: "pointer"
+							}}
+						>
+							Save Reminder Time
+						</button>
+					</div>
+				)}
 				<button
 					onClick={onClose}
 					style={{

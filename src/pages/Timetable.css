@@ -1,5 +1,15 @@
 /* Timetable Page Specific Styles */
 
+/* Tight spacing for timetable on all screen sizes */
+.timetable-table {
+  margin-top: 0 !important;
+}
+
+.timetable-table th,
+.timetable-table td {
+  padding: 6px !important;
+}
+
 /* Mobile Responsive Styles for Timetable Page */
 @media (max-width: 768px) {
   .timetable-buttons {
@@ -41,6 +51,38 @@
     padding: 6px 10px !important;
     font-size: 12px !important;
     margin: 2px !important;
+  }
+
+  /* Ensure all columns are visible */
+  .timetable-table {
+    width: 100% !important;
+    display: table !important;
+    border-collapse: collapse;
+    table-layout: auto !important;
+  }
+
+  .timetable-table th,
+  .timetable-table td {
+    padding: 8px !important;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .timetable-table th:nth-child(4),
+  .timetable-table td:nth-child(4) {
+    width: 30%;
+    min-width: 100px;
+  }
+
+  .timetable-table td:nth-child(4) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .timetable-table td:nth-child(4) button {
+    width: 100% !important;
+    margin: 0 !important;
   }
 
   /* Attendance percentage circle */

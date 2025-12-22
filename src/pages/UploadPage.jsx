@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import "./UploadPage.css";
@@ -23,6 +23,21 @@ function UploadPage() {
 	const [showDaySelectionModal, setShowDaySelectionModal] = useState(false);
 	const [daySelections, setDaySelections] = useState({}); // { dayName: [subjects present that day] }
 	const [currentDayForSelection, setCurrentDayForSelection] = useState(0); // index in dayNames array
+
+	// Refs to subject text inputs for focusing
+	const subjectInputRefs = useRef([]);
+
+	// Focus the first empty subject input when entering Add mode (once)
+	useEffect(() => {
+		if (option === "add") {
+			setTimeout(() => {
+				const idx = subjects.findIndex((s) => !s || s.trim().length === 0);
+				subjectInputRefs.current[(idx >= 0 ? idx : 0)]?.focus();
+			}, 0);
+		}
+		// Do not refocus on every subject change to avoid stealing cursor
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [option]);
 
 	if (!date || !day) return <p>Please select date and day first.</p>;
 
@@ -56,7 +71,17 @@ function UploadPage() {
 		}
 	}, [showHolidayModal, holidayByDay, isChangingMode]);
 
-	const handleAddSubjectField = () => setSubjects([...subjects, ""]);
+	const handleAddSubjectField = () => {
+		setSubjects((prev) => {
+			const next = [...prev, ""];
+			// Focus the newly added input after render
+			setTimeout(() => {
+				const idx = next.length - 1;
+				subjectInputRefs.current[idx]?.focus();
+			}, 0);
+			return next;
+		});
+	};
 	const handleSubjectChange = (index, value) => {
 		const newSubjects = [...subjects];
 		newSubjects[index] = value;
@@ -87,6 +112,9 @@ function UploadPage() {
 		// Now ask for subject count and day mapping
 		if (tempSubjects.length > 0) {
 			setPendingSubjects(tempSubjects);
+			// Initialize default period count to 1 for each subject
+			const defaults = Object.fromEntries(tempSubjects.map((s) => [s, 1]));
+			setSubjectDayConfig(defaults);
 			setShowHolidayModal(false);
 			setShowSubjectConfigModal(true);
 		} else {
@@ -115,7 +143,7 @@ function UploadPage() {
 		});
 
 		if (!allValid) {
-			alert("Please enter a valid period count (1-5) for each subject. Zero is not allowed.");
+			alert("Please enter a valid period count for each subject.");
 			return;
 		}
 
@@ -227,24 +255,21 @@ function UploadPage() {
 			status: "",
 		}));
 		setTimetablesByDay((prev) => ({ ...prev, [day]: rows }));
-		
 		setTempSubjects(list);
 		setShowHolidayModal(true);
 	};
 
+	// Upload timetable image and parse subjects
 	const handleUpload = async () => {
 		if (!file) {
 			alert("Please select a file first");
 			return;
 		}
-		
-		// Validate file type
 		const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 		if (!validTypes.includes(file.type)) {
 			alert("Please upload a JPG or PNG image");
 			return;
 		}
-		
 		setError("");
 		setUploading(true);
 		try {
@@ -252,141 +277,125 @@ function UploadPage() {
 			form.append("file", file);
 			form.append("date", date);
 			form.append("day", day);
-			
+
 			const resp = await fetch(`${API_BASE}/api/timetable/upload`, {
 				method: "POST",
 				body: form,
 			});
-			
+
 			if (!resp.ok) {
 				const errData = await resp.json();
 				throw new Error(errData.error || `Upload failed: ${resp.status}`);
 			}
-			
+
 			const data = await resp.json();
 
 			// If backend detected this day as a holiday, show message and empty timetable
 			if (data.holiday) {
-					const key = day; // Use weekday only
-					
-					// Save all detected days' timetables to context
-					if (data.allDaysTimetables && typeof data.allDaysTimetables === 'object') {
-						console.log('Received allDaysTimetables:', data.allDaysTimetables);
-						const capitalizeDay = (d) => {
-							const lower = d.toLowerCase();
-							return lower.charAt(0).toUpperCase() + lower.slice(1);
-						};
-						setTimetablesByDay((prev) => {
-							const updated = { ...prev };
-							Object.entries(data.allDaysTimetables).forEach(([detectedDay, dayData]) => {
-								const dayKey = capitalizeDay(detectedDay);
-								console.log(`Saving ${detectedDay} as ${dayKey}:`, dayData.timetable);
-								if (dayData.timetable && Array.isArray(dayData.timetable)) {
-									updated[dayKey] = dayData.timetable;
-								}
-							});
-							// Mark the current (holiday) day as empty
-							updated[key] = [];
-							console.log('Final timetablesByDay:', updated);
-							return updated;
-						});
-					} else {
-						console.log('No allDaysTimetables received');
-						// Fallback: if subjects and detectedDays are present, create a simple template
-						const subjects = Array.isArray(data.subjects) ? data.subjects.filter(s => s && s.trim().length > 0) : [];
-						const detectedDays = Array.isArray(data.detectedDays) ? data.detectedDays : [];
-						const capitalizeDay = (d) => {
-							const lower = String(d || '').toLowerCase();
-							return lower.charAt(0).toUpperCase() + lower.slice(1);
-						};
-						setTimetablesByDay((prev) => {
-							const updated = { ...prev };
-							if (subjects.length > 0 && detectedDays.length > 0) {
-								const rows = subjects.map((subject, idx) => ({ sno: idx + 1, subject, status: "" }));
-								detectedDays.forEach((d) => {
-									const dayKey = capitalizeDay(d);
-									if (dayKey && dayKey !== key) {
-										updated[dayKey] = rows;
-									}
-								});
+				const key = day; // Use weekday only
+				// Save all detected days' timetables to context
+				if (data.allDaysTimetables && typeof data.allDaysTimetables === 'object') {
+					const capitalizeDay = (d) => {
+						const lower = d.toLowerCase();
+						return lower.charAt(0).toUpperCase() + lower.slice(1);
+					};
+					setTimetablesByDay((prev) => {
+						const updated = { ...prev };
+						Object.entries(data.allDaysTimetables).forEach(([detectedDay, dayData]) => {
+							const dayKey = capitalizeDay(detectedDay);
+							if (dayData.timetable && Array.isArray(dayData.timetable)) {
+								updated[dayKey] = dayData.timetable;
 							}
-							// Mark the current (holiday) day as empty
-							updated[key] = [];
-							console.log('Final timetablesByDay (fallback rows):', updated);
-							return updated;
 						});
-					}
-					
-					setTimetable([]);
-					const msg = data.message || `No classes for ${day}`;
-					setHolidayMessage(msg);
-					setHolidayByDay((prev) => ({ ...prev, [key]: msg }));
-					setSetupCompleted(true);
-					navigate("/timetable");
-					return;
-				}
-
-				if (data.timetable && Array.isArray(data.timetable)) {
-					const key = day; // Use weekday only
-					// If backend provided allDaysTimetables, save them too so other weekdays populate
-					if (data.allDaysTimetables && typeof data.allDaysTimetables === 'object') {
-						const capitalizeDay = (d) => {
-							const lower = d.toLowerCase();
-							return lower.charAt(0).toUpperCase() + lower.slice(1);
-						};
-						setTimetablesByDay((prev) => {
-							const updated = { ...prev };
-							Object.entries(data.allDaysTimetables).forEach(([detectedDay, dayData]) => {
-								const dayKey = capitalizeDay(detectedDay);
-								if (dayData.timetable && Array.isArray(dayData.timetable)) {
-									updated[dayKey] = dayData.timetable;
-								}
-							});
-							// Ensure current day is set from primary timetable
-							updated[key] = data.timetable;
-							return updated;
-						});
-					} else {
-						// Fallback: if subjects and detectedDays are present, create a simple template for other days
-						const subjects = Array.isArray(data.subjects) ? data.subjects.filter(s => s && s.trim().length > 0) : [];
-						const detectedDays = Array.isArray(data.detectedDays) ? data.detectedDays : [];
-						const capitalizeDay = (d) => {
-							const lower = String(d || '').toLowerCase();
-							return lower.charAt(0).toUpperCase() + lower.slice(1);
-						};
-						setTimetablesByDay((prev) => {
-							const updated = { ...prev, [key]: data.timetable };
-							if (subjects.length > 0 && detectedDays.length > 0) {
-								const rows = subjects.map((subject, idx) => ({ sno: idx + 1, subject, status: "" }));
-								detectedDays.forEach((d) => {
-									const dayKey = capitalizeDay(d);
-									if (dayKey && dayKey !== key && !updated[dayKey]) {
-										updated[dayKey] = rows;
-									}
-								});
-							}
-							console.log('Final timetablesByDay (fallback rows + current):', updated);
-							return updated;
-						});
-					}
-
-
-					setTimetable(data.timetable);
-					setHolidayMessage("");
-					setHolidayByDay((prev) => {
-						const next = { ...prev };
-						delete next[key];
-						return next;
+						// Mark the current (holiday) day as empty
+						updated[key] = [];
+						return updated;
 					});
+				} else {
+					// Fallback: simple template for detected days
+					const subjects = Array.isArray(data.subjects) ? data.subjects.filter(s => s && s.trim().length > 0) : [];
+					const detectedDays = Array.isArray(data.detectedDays) ? data.detectedDays : [];
+					const capitalizeDay = (d) => {
+						const lower = String(d || '').toLowerCase();
+						return lower.charAt(0).toUpperCase() + lower.slice(1);
+					};
+					setTimetablesByDay((prev) => {
+						const updated = { ...prev };
+						if (subjects.length > 0 && detectedDays.length > 0) {
+							const rows = subjects.map((subject, idx) => ({ sno: idx + 1, subject, status: "" }));
+							detectedDays.forEach((d) => {
+								const dayKey = capitalizeDay(d);
+								if (dayKey && dayKey !== key) {
+									updated[dayKey] = rows;
+								}
+							});
+						}
+						// Mark the current (holiday) day as empty
+						updated[key] = [];
+						return updated;
+					});
+				}
+				setTimetable([]);
+				const msg = data.message || `No classes for ${day}`;
+				setHolidayMessage(msg);
+				setHolidayByDay((prev) => ({ ...prev, [key]: msg }));
+				setSetupCompleted(true);
+				navigate("/timetable");
+				return;
+			}
 
-				// For image uploads, go to holiday modal to set holidays before config
+			if (data.timetable && Array.isArray(data.timetable)) {
+				const key = day; // Use weekday only
+				if (data.allDaysTimetables && typeof data.allDaysTimetables === 'object') {
+					const capitalizeDay = (d) => {
+						const lower = d.toLowerCase();
+						return lower.charAt(0).toUpperCase() + lower.slice(1);
+					};
+					setTimetablesByDay((prev) => {
+						const updated = { ...prev };
+						Object.entries(data.allDaysTimetables).forEach(([detectedDay, dayData]) => {
+							const dayKey = capitalizeDay(detectedDay);
+							if (dayData.timetable && Array.isArray(dayData.timetable)) {
+								updated[dayKey] = dayData.timetable;
+							}
+						});
+						updated[key] = data.timetable;
+						return updated;
+					});
+				} else {
+					const subjects = Array.isArray(data.subjects) ? data.subjects.filter(s => s && s.trim().length > 0) : [];
+					const detectedDays = Array.isArray(data.detectedDays) ? data.detectedDays : [];
+					const capitalizeDay = (d) => {
+						const lower = String(d || '').toLowerCase();
+						return lower.charAt(0).toUpperCase() + lower.slice(1);
+					};
+					setTimetablesByDay((prev) => {
+						const updated = { ...prev, [key]: data.timetable };
+						if (subjects.length > 0 && detectedDays.length > 0) {
+							const rows = subjects.map((subject, idx) => ({ sno: idx + 1, subject, status: "" }));
+							detectedDays.forEach((d) => {
+								const dayKey = capitalizeDay(d);
+								if (dayKey && dayKey !== key && !updated[dayKey]) {
+									updated[dayKey] = rows;
+								}
+							});
+						}
+						return updated;
+					});
+				}
+				setTimetable(data.timetable);
+				setHolidayMessage("");
+				setHolidayByDay((prev) => {
+					const next = { ...prev };
+					delete next[key];
+					return next;
+				});
 				setTempSubjects(data.subjects || []);
 				setShowHolidayModal(true);
 			} else {
 				throw new Error("Unexpected response format");
 			}
 		} catch (e) {
-			// Network error typically produces "TypeError: Failed to fetch"
 			const msg = (e && e.message) ? e.message : "Upload failed";
 			const hint = msg.toLowerCase().includes("failed to fetch")
 				? `Cannot reach backend at ${API_BASE}. Ensure the server is running and accessible.`
@@ -495,7 +504,7 @@ function UploadPage() {
 			{option === "add" && (
 				<div className="add-subject-section">
 					<h3>Add Subjects Manually</h3>
-					{subjects.map((subj, i) => (
+						{subjects.map((subj, i) => (
 						<div key={i} style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center" }}>
 							<input
 								type="text"
@@ -503,12 +512,20 @@ function UploadPage() {
 								value={subj}
 								onChange={(e) => handleSubjectChange(i, e.target.value)}
 								style={{ flex: 1 }}
+								ref={(el) => (subjectInputRefs.current[i] = el)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" && (e.currentTarget.value || "").trim().length > 0) {
+										// Add a new empty box and focus it
+										handleAddSubjectField();
+										setTimeout(() => subjectInputRefs.current[i + 1]?.focus(), 0);
+									}
+								}}
 							/>
 							<button onClick={() => handleRemoveSubjectField(i)} style={{ backgroundColor: "#ff6666" }}>Remove</button>
 						</div>
 					))}
 					<div className="upload-buttons">
-						<button onClick={handleAddSubjectField}>+ Add Subject</button>
+						<button onClick={handleAddSubjectField} tabIndex={-1}>+ Add Subject</button>
 						<button onClick={() => setOption(null)}>← Back</button>
 						<button onClick={handleNextManual}>Next →</button>
 					</div>
@@ -745,13 +762,12 @@ function UploadPage() {
 								}}>
 									{subject}:
 								</label>
-								<input
+																<input
 									type="number"
 									min="1"
 									max="5"
-									placeholder="1-5"
 									inputMode="numeric"
-									value={subjectDayConfig[subject] ?? ""}
+																		value={subjectDayConfig[subject] ?? 1}
 									onChange={(e) => {
 										const val = e.target.value === "" ? "" : parseInt(e.target.value);
 										if (val === "" || (val >= 1 && val <= 5)) {
@@ -783,6 +799,26 @@ function UploadPage() {
 										e.target.style.boxShadow = "none";
 									}}
 								/>
+																	<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+																		<button
+																			type="button"
+																			onClick={() => {
+																				const current = subjectDayConfig[subject] ?? 1;
+																				const next = Math.min(5, (current || 1) + 1);
+																				setSubjectDayConfig((prev) => ({ ...prev, [subject]: next }));
+																			}}
+																			style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #90caf9", background: "#e3f2fd", cursor: "pointer" }}
+																		>▲</button>
+																		<button
+																			type="button"
+																			onClick={() => {
+																				const current = subjectDayConfig[subject] ?? 1;
+																				const next = Math.max(1, (current || 1) - 1);
+																				setSubjectDayConfig((prev) => ({ ...prev, [subject]: next }));
+																			}}
+																			style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #ffcc80", background: "#fff3e0", cursor: "pointer" }}
+																		>▼</button>
+																	</div>
 								<span style={{ fontSize: "15px", color: "#757575", fontWeight: "500" }}>periods</span>
 							</div>
 						))}

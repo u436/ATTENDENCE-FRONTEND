@@ -1,8 +1,5 @@
 /* Reports Page Specific Styles */
 
-.reports-container {
-  /* Uses default centered-card max-width for consistency */
-}
 
 .reports-input-grid {
   display: grid;

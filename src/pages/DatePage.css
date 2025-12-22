@@ -6,6 +6,16 @@
   gap: 10px;
 }
 
+.custom-datepicker {
+  width: 100%;
+  max-width: 400px;
+}
+
+.day-input {
+  width: 100%;
+  max-width: 400px;
+}
+
 .month-name {
   color: #00d4ff;
   font-weight: bold;

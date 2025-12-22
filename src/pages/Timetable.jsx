@@ -201,8 +201,14 @@ function Timetable() {
     // Use date-day key for specific date holidays (not recurring holidays by weekday)
     const dateKey = `${date}-${day}`;
     setHolidayByDate((prev) => ({ ...prev, [dateKey]: msg }));
+    
+    // Store the current timetable source before marking as holiday
+    // This allows us to restore it automatically when unmarking
+    const currentTimetableSource = overrideSourceDay || key;
     setDateTimetableOverride((prev) => {
       const next = { ...prev };
+      // Store a special marker that includes the previous timetable source
+      next[`${dateKey}_backup`] = currentTimetableSource;
       delete next[dateKey];
       return next;
     });
@@ -210,13 +216,40 @@ function Timetable() {
 
   const handleUnmarkAsHoliday = () => {
     if (!key) return;
-    const hasCurrentDayTimetable = Array.isArray(timetablesByDay[key]) && timetablesByDay[key].length > 0;
-    const initialSelection = hasCurrentDayTimetable
-      ? key
-      : (availableOverrideDays[0] || "");
-    setSelectedOverrideDay(initialSelection);
-    setOverrideMode("unmark");
-    setShowOverrideModal(true);
+    const dateKey = `${date}-${day}`;
+    // Check if we have a backup of the previous timetable source
+    const backupKey = `${dateKey}_backup`;
+    const previousTimetableSource = dateTimetableOverride[backupKey];
+    
+    if (previousTimetableSource && timetablesByDay[previousTimetableSource]) {
+      // Automatically restore the previous timetable without asking
+      setDateTimetableOverride((prev) => {
+        const next = { ...prev };
+        // Only set override if it's different from the current day
+        if (previousTimetableSource !== key) {
+          next[dateKey] = previousTimetableSource;
+        }
+        delete next[backupKey]; // Clean up the backup
+        return next;
+      });
+      setTimetable(timetablesByDay[previousTimetableSource]);
+      // Clear the holiday marker
+      setHolidayMessage("");
+      setHolidayByDate((prev) => {
+        const next = { ...prev };
+        delete next[dateKey];
+        return next;
+      });
+    } else {
+      // No backup found - ask user to select a timetable (old behavior)
+      const hasCurrentDayTimetable = Array.isArray(timetablesByDay[key]) && timetablesByDay[key].length > 0;
+      const initialSelection = hasCurrentDayTimetable
+        ? key
+        : (availableOverrideDays[0] || "");
+      setSelectedOverrideDay(initialSelection);
+      setOverrideMode("unmark");
+      setShowOverrideModal(true);
+    }
   };
 
   const handleCopyTemplateToDay = () => {
@@ -248,6 +281,7 @@ function Timetable() {
   }, [timetablesByDay, holidayByDay]);
 
   const handleConfirmOverride = () => {
+    const dateKey = `${date}-${day}`;
     // Apply selected override timetable if provided; otherwise set empty override to keep the day active without a schedule
     if (selectedOverrideDay) {
       setDateTimetableOverride((prev) => ({ ...prev, [dateKey]: selectedOverrideDay }));
@@ -267,6 +301,12 @@ function Timetable() {
         delete next[dateKey];
         return next;
       });
+      // Clean up any backup key
+      setDateTimetableOverride((prev) => {
+        const next = { ...prev };
+        delete next[`${dateKey}_backup`];
+        return next;
+      });
     }
     setShowOverrideModal(false);
     setSelectedOverrideDay("");
@@ -275,8 +315,8 @@ function Timetable() {
 
   return (
     <>
-    <div className="centered-card">
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }} className="timetable-buttons">
+    <div className="timetable-card">
+      <div style={{ display: "flex", gap: "6px", marginBottom: "4px" }} className="timetable-buttons">
         <button onClick={() => navigate("/", { replace: true })}>← Back</button>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
         <button onClick={() => navigate("/reports")} style={{ marginLeft: "auto" }}>
@@ -284,24 +324,24 @@ function Timetable() {
         </button>
       </div>
       <Settings isOpen={showSettings} onClose={() => setShowSettings(false)} />
-      <h2>Today's Classes</h2>
+      <h2 style={{ margin: "0 0 2px 0" }}>Today's Classes</h2>
       {date && day && (
-        <p style={{ marginTop: "-5px", marginBottom: "10px", fontWeight: "600", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap" }} className="date-day-display">
+        <p style={{ marginTop: "0", marginBottom: "2px", fontWeight: "600", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap" }} className="date-day-display">
           <span>{date}</span>
           <span>|</span>
           <span>{day}</span>
         </p>
       )}
-      {overrideSourceDay && (
-        <div style={{ padding: 8, border: "1px dashed #7cb342", borderRadius: 6, background: "#f1f8e9", color: "#33691e", fontWeight: 600, marginBottom: 10 }}>
+      {overrideSourceDay && overrideSourceDay !== key && (
+        <div style={{ padding: 6, border: "1px dashed #7cb342", borderRadius: 6, background: "#f1f8e9", color: "#33691e", fontWeight: 600, marginBottom: 2 }}>
           {overrideSourceDay === EMPTY_OVERRIDE ? "This date is active (not a holiday) with no timetable selected" : `Using ${overrideSourceDay} timetable for this date`}
         </div>
       )}
       
       {/* If no schedule for this day but a template exists, offer quick copy */}
       {!holidayNote && timetable.length === 0 && anyScheduleTemplate && (
-        <div style={{ marginBottom: "15px", padding: "20px", backgroundColor: "#f0f8ff", border: "2px dashed #007bff", borderRadius: "8px", textAlign: "center" }} className="copy-template-section">
-          <p style={{ marginBottom: "15px", fontSize: "16px", color: "#333" }}>
+        <div style={{ marginBottom: "4px", padding: "8px", backgroundColor: "#f0f8ff", border: "2px dashed #007bff", borderRadius: "8px", textAlign: "center" }} className="copy-template-section">
+          <p style={{ marginBottom: "6px", fontSize: "16px", color: "#333" }}>
             📋 No timetable found for {day}. Copy from another day?
           </p>
           <button
@@ -328,11 +368,11 @@ function Timetable() {
       
       {/* Mark as Holiday Section */}
       {timetable.length > 0 && !holidayNote && !isFutureDate && (
-        <div style={{ marginBottom: "15px" }}>
+        <div style={{ marginBottom: "2px" }}>
           <button 
             onClick={handleMarkAsHoliday}
             style={{ 
-              backgroundColor: "#ff9800", 
+              backgroundColor: "#4CAF50", 
               color: "white", 
               padding: "10px 20px",
               border: "none",
@@ -347,14 +387,14 @@ function Timetable() {
       )}
 
       {(holidayNote || isFutureDate) && (
-        <div style={{ marginBottom: "15px" }}>
+        <div style={{ marginBottom: "2px" }}>
           {holidayNote && (
-            <div style={{ padding: 16, border: "1px dashed #ff9800", borderRadius: 8, background: "#fff7e6", color: "#c26600", fontWeight: 600, marginBottom: "10px" }}>
+            <div style={{ padding: 6, border: "1px dashed #ff9800", borderRadius: 8, background: "#fff7e6", color: "#c26600", fontWeight: 600, marginBottom: "2px" }}>
               {holidayNote}
             </div>
           )}
           {isFutureDate && (
-            <div style={{ padding: 16, border: "1px dashed #90caf9", borderRadius: 8, background: "#e3f2fd", color: "#1565c0", fontWeight: 600, marginBottom: "10px" }}>
+            <div style={{ padding: 6, border: "1px dashed #90caf9", borderRadius: 8, background: "#e3f2fd", color: "#1565c0", fontWeight: 600, marginBottom: "2px" }}>
               Future date selected — attendance actions are disabled.
             </div>
           )}
@@ -377,7 +417,7 @@ function Timetable() {
         </div>
       )}
 
-      <table border="1" cellPadding="10" style={{ width: "100%" }} className="timetable-table">
+      <table border="1" cellPadding="6" style={{ width: "100%", tableLayout: "auto", marginTop: "0" }} className="timetable-table">
         <thead>
           <tr>
             <th>S.No</th>

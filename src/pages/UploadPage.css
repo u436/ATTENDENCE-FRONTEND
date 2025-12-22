@@ -4,15 +4,18 @@ body.welcome-page, body.other-unwanted-pages {
 }
 
 .upload-page-container {
-  max-width: 900px;
-  margin: 50px auto;
-  padding: 30px;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 16px;
   text-align: center;
-  color: #fff;
+  color: #213547;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #1f1f3a, #2c2c5a);
-  border-radius: 15px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8);
+  background: transparent; /* No page background */
+  border-radius: 0;
+  box-shadow: none;
+  display: grid;
+  place-items: center;
 }
 
 /* Top Back button */
@@ -49,26 +52,28 @@ body.welcome-page, body.other-unwanted-pages {
 /* Option Cards */
 .options-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 30px;
   margin-top: 20px;
+  width: min(95vw, 900px);
 }
 
 .option-card {
-  background: linear-gradient(135deg, #2a2a4a, #3a3a7a);
-  border-radius: 15px;
-  padding: 40px 30px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   flex: 1 1 250px;
   max-width: 300px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: none;
 }
 
 .option-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+  transform: none;
+  box-shadow: none;
 }
 
 .option-card .icon {
@@ -79,10 +84,13 @@ body.welcome-page, body.other-unwanted-pages {
 /* Upload Section */
 .upload-section {
   margin-top: 30px;
-  padding: 20px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #2c2c5a, #3a3a7a);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  width: min(95vw, 900px);
+  margin: 0 auto;
 }
 
 .upload-section input[type="file"] {
@@ -92,10 +100,13 @@ body.welcome-page, body.other-unwanted-pages {
 /* Add Subjects Section */
 .add-subject-section {
   margin-top: 30px;
-  padding: 20px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #2c2c5a, #3a3a7a);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  width: min(95vw, 900px);
+  margin: 0 auto;
 }
 
 .add-subject-section input {
@@ -103,9 +114,9 @@ body.welcome-page, body.other-unwanted-pages {
   margin: 8px 0;
   padding: 10px;
   border-radius: 8px;
-  border: none;
-  background-color: #4a4a7a;
-  color: #fff;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #213547;
 }
 
 .add-subject-section button {

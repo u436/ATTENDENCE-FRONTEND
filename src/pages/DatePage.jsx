@@ -60,7 +60,8 @@ function DatePage() {
 
   return (
     <div className="centered-card">
-      <h2>Enter Date and Day</h2>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", width: "100%", maxWidth: "400px" }}>
+        <h2 style={{ margin: 0, marginBottom: "8px" }}>Enter Date and Day</h2>
 
       <DatePicker
         selected={selectedDate}
@@ -132,11 +133,13 @@ function DatePage() {
         readOnly
         tabIndex={-1}
         className="day-input"
+        style={{ width: "100%", maxWidth: "400px" }}
       />
 
-      <div className="button-row">
+      <div className="button-row" style={{ gap: "8px", width: "100%", maxWidth: "400px" }}>
         <button onClick={() => navigate("/", { replace: true })}>← Back</button>
         <button onClick={handleNext}>Next →</button>
+      </div>
       </div>
     </div>
   );
