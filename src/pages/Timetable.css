@@ -32,6 +32,15 @@
   display: block !important;
   flex-direction: column;
   gap: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+.timetable-card > * {
+  width: 100vw !important;
+  max-width: 100vw !important;
 }
 
 .timetable-card h2 {

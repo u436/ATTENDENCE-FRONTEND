@@ -718,10 +718,11 @@ function UploadPage() {
 			}}>
 				<div style={{
 					backgroundColor: "white",
-					padding: "32px",
-					borderRadius: "16px",
-					minWidth: "480px",
-					maxWidth: "90%",
+					padding: "20px",
+					borderRadius: "12px",
+					minWidth: "320px",
+					width: "95vw",
+					maxWidth: "520px",
 					color: "#333",
 					boxShadow: "0 10px 40px rgba(0,0,0,0.3)"
 				}}>
@@ -738,8 +739,10 @@ function UploadPage() {
 								style={{ 
 									display: "flex", 
 									alignItems: "center", 
-									gap: "16px",
-									padding: "14px 18px",
+									gap: "12px",
+									flexWrap: "wrap",
+									justifyContent: "space-between",
+										padding: "12px 14px",
 									backgroundColor: idx % 2 === 0 ? "#f5f5f5" : "#fff",
 									borderRadius: "10px",
 									border: "2px solid #e0e0e0",
@@ -755,7 +758,8 @@ function UploadPage() {
 								}}
 							>
 								<label style={{ 
-									minWidth: "180px", 
+									minWidth: "140px",
+									flex: "1 1 160px",
 									fontWeight: 600, 
 									color: "#1976d2",
 									fontSize: "16px"
@@ -766,7 +770,7 @@ function UploadPage() {
 									type="number"
 									min="1"
 									max="5"
-									inputMode="numeric"
+																	inputMode="numeric"
 																		value={subjectDayConfig[subject] ?? 1}
 									onChange={(e) => {
 										const val = e.target.value === "" ? "" : parseInt(e.target.value);

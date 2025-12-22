@@ -31,6 +31,16 @@ h1, h2 { color: #333; margin-bottom: 20px; }
 .centered-card > *,
 .timetable-card > * { width: min(95vw, 900px); margin: 0 auto; }
 
+@media (max-width: 800px) {
+  .centered-card > *,
+  .timetable-card > * {
+    width: 100vw;
+    max-width: 100vw;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 /* Page-specific typography */
 .reports-container h2 { font-size: 1.8rem; }
 .reports-container h3 { font-size: 1.2rem; }

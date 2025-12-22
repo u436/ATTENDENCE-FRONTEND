@@ -69,6 +69,8 @@ function DatePage() {
         dateFormat="yyyy-MM-dd"
         placeholderText="Select a date"
         className="custom-datepicker"
+        readOnly
+        inputMode="none"
         scrollableYearDropdown
         monthsShown={1} // single month
         dropdownMode="select"
@@ -131,6 +133,7 @@ function DatePage() {
         placeholder="Day (Monday)"
         value={localDay || ""}
         readOnly
+        inputMode="none"
         tabIndex={-1}
         className="day-input"
         style={{ width: "100%", maxWidth: "400px" }}
