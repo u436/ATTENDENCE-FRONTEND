@@ -1,5 +1,5 @@
 // src/pages/Reports.jsx
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import "./Reports.css";
@@ -7,10 +7,49 @@ import "./Reports.css";
 function Reports() {
   const { date, timetablesByDay, holidayByDay, holidayByDate, attendanceDetailByDate, dateTimetableOverride } = useContext(AppContext);
   const navigate = useNavigate();
-  const [yearInput, setYearInput] = useState("");
-  const [monthInput, setMonthInput] = useState("");
-  const [dayInput, setDayInput] = useState("");
-  const [subjectInput, setSubjectInput] = useState("all");
+  
+  // Load from localStorage on mount
+  const [yearInput, setYearInput] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('reports_year') || "";
+    }
+    return "";
+  });
+  const [monthInput, setMonthInput] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('reports_month') || "";
+    }
+    return "";
+  });
+  const [dayInput, setDayInput] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('reports_day') || "";
+    }
+    return "";
+  });
+  const [subjectInput, setSubjectInput] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('reports_subject') || "all";
+    }
+    return "all";
+  });
+  
+  // Save to localStorage when inputs change
+  useEffect(() => {
+    localStorage.setItem('reports_year', yearInput);
+  }, [yearInput]);
+  
+  useEffect(() => {
+    localStorage.setItem('reports_month', monthInput);
+  }, [monthInput]);
+  
+  useEffect(() => {
+    localStorage.setItem('reports_day', dayInput);
+  }, [dayInput]);
+  
+  useEffect(() => {
+    localStorage.setItem('reports_subject', subjectInput);
+  }, [subjectInput]);
   const hasManualDate = yearInput.trim() || monthInput.trim() || dayInput.trim();
   const isFullDateSearch = yearInput.trim() && monthInput.trim() && dayInput.trim();
   const normalizeDate = (y, m, d) => {
@@ -208,12 +247,12 @@ function Reports() {
 
   return (
     <div className="centered-card reports-container">
-      <div style={{ display: "flex", gap: "8px", marginBottom: 6, justifyContent: "center", alignItems: "center" }} className="reports-buttons">
+      <div style={{ display: "flex", gap: "8px", justifyContent: "center", alignItems: "center" }} className="reports-buttons">
         <button style={{ flex: "1", minWidth: "100px", maxWidth: "150px" }} onClick={() => navigate("/timetable")}>← Back</button>
         <button style={{ flex: "1", minWidth: "100px", maxWidth: "150px" }} onClick={() => navigate("/")}>Home</button>
       </div>
-      <h2 style={{ margin: "0 0 6px 0" }}>Reports</h2>
-      <p style={{ color: "#607d8b", margin: "0 0 8px 0" }}>Pick a day/month and (optionally) a subject filter.</p>
+      <h2>Reports</h2>
+      <p>Pick a day/month and (optionally) a subject filter.</p>
       <div className="reports-input-grid">
         <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <label style={{ fontSize: 12, color: "#5c6f82", fontWeight: 600 }}>Year (YYYY)</label>
@@ -258,8 +297,8 @@ function Reports() {
         </div>
       </div>
 
-      <h3 style={{ margin: "10px 0 6px 0" }}>Selected Day Details</h3>
-      <div className="report-section" style={{ padding: 10, marginBottom: 10 }}>
+      <h3>Selected Day Details</h3>
+      <div className="report-section" style={{ maxHeight: 300, overflowY: "auto" }}>
         {!selectedDate ? (
           <p style={{ margin: 0 }}>Pick a date to view its timetable.</p>
         ) : holidayNoteForSelectedDate ? (
@@ -298,8 +337,8 @@ function Reports() {
 
       {!isFullDateSearch && (
         <>
-      <h3 style={{ margin: "8px 0 4px 0" }}>Today - Attendance by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
+      <h3>Today - Attendance by Subject</h3>
+      <div className="report-section" style={{ maxHeight: 240, overflowY: "auto" }}>
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
@@ -326,8 +365,8 @@ function Reports() {
 
       {!isFullDateSearch && (
         <>
-      <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Attendance by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
+      <h3>This Month - Attendance by Subject</h3>
+      <div className="report-section" style={{ maxHeight: 260, overflowY: "auto" }}>
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
@@ -354,8 +393,8 @@ function Reports() {
 
       {!isFullDateSearch && (
         <>
-      <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Average by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
+      <h3>This Month - Average by Subject</h3>
+      <div className="report-section" style={{ maxHeight: 260, overflowY: "auto" }}>
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
@@ -387,8 +426,8 @@ function Reports() {
       {!isFullDateSearch && (
         <>
       {/* Holiday List */}
-      <h3 style={{ margin: "8px 0 4px 0" }}>🌴 Holidays</h3>
-      <div style={{ maxHeight: 240, overflowY: "auto", padding: 8, backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "8px" }}>
+      <h3>🌴 Holidays</h3>
+      <div style={{ maxHeight: 240, overflowY: "auto", padding: 12, backgroundColor: "#ffffff", border: "1px solid #e3e9f5", borderRadius: "8px" }}>
         {holidayDates.length === 0 ? (
           <p style={{ color: "#666", textAlign: "center" }}>No holidays this month.</p>
         ) : (
