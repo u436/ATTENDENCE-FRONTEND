@@ -6,6 +6,10 @@
   padding: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   border: 1px solid #dfe7fb;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .reports-buttons button {
