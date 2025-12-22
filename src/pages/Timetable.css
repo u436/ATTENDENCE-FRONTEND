@@ -6,14 +6,14 @@
   margin: 0 !important;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
-  padding: 0 !important;
-  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-/* Buttons - collapse spacing */
+/* Buttons - proper spacing and visibility */
 .timetable-buttons {
   margin-bottom: 0 !important;
-  line-height: 0 !important;
   width: 100% !important;
   max-width: 100% !important;
   padding-left: 4px !important;
@@ -22,7 +22,10 @@
 }
 
 .timetable-buttons button {
-  line-height: 1 !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
 }
 
 /* Content below buttons - no spacing */
@@ -39,7 +42,6 @@
   gap: 0 !important;
   width: 100vw !important;
   max-width: 100vw !important;
-  padding: 0 !important;
   justify-content: flex-start !important;
 }
 

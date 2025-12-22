@@ -6,6 +6,13 @@ html, body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-sizing: border-box;
   background: transparent;
+  /* Mobile/WebView stability */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  /* Ensure full height on Android Chrome/WebView */
+  height: -webkit-fill-available;
 }
 
 * { 
@@ -34,13 +41,16 @@ h1, h2 { color: #333; margin-bottom: 20px; }
   display: grid;
   place-items: center;
   overflow-x: hidden;
+  /* Respect safe areas for notches on phones */
+  padding-top: calc(16px + env(safe-area-inset-top));
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 
 .centered-card:hover,
 .timetable-card:hover { transform: none; box-shadow: none; }
 
 .centered-card > *,
-.timetable-card > * { width: min(95vw, 900px); margin: 0 auto; }
+.timetable-card > * { width: 100%; max-width: 100%; margin: 0 auto; }
 
 /* MOBILE / WEBVIEW FIX - Override desktop grid with flexbox for proper centering */
 @media (max-width: 800px) {
@@ -57,6 +67,8 @@ h1, h2 { color: #333; margin-bottom: 20px; }
     min-height: 100vh;
     width: 100vw;
     overflow-x: hidden;
+    /* Avoid pull-to-refresh overscroll bouncing */
+    overscroll-behavior-y: contain;
   }
 
   .centered-card,
@@ -73,6 +85,8 @@ h1, h2 { color: #333; margin-bottom: 20px; }
     align-items: center;
     min-height: 100vh;
     place-items: unset;
+    padding-top: calc(8px + env(safe-area-inset-top));
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
   }
   
   .centered-card > *,

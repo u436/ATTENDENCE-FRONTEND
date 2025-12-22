@@ -3,11 +3,11 @@
 .reports-container {
   background: linear-gradient(135deg, #f5f8ff 0%, #eef3ff 50%, #f9fcff 100%);
   border-radius: 14px;
-  padding: 16px;
+  padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   border: 1px solid #dfe7fb;
   width: 100%;
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -19,10 +19,12 @@
 
 .reports-input-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
   align-items: center;
   margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .reports-input-grid > div {
@@ -31,6 +33,7 @@
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  min-width: 0;
 }
 
 .reports-input-grid input,
@@ -39,6 +42,8 @@
   border: 1.5px solid #cddaf7;
   border-radius: 8px;
   color: #1f2d3d;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .reports-input-grid label {

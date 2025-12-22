@@ -105,6 +105,8 @@ function Timetable() {
   }, [displayedTimetable]);
 
   const weightForRow = (row) => {
+    const explicit = Number(row?.weight);
+    if (!Number.isNaN(explicit) && explicit > 0) return explicit;
     const dur = parseTime(row.time);
     if (!dur || !baselineMinutes) return 1;
     const w = Math.round(dur / baselineMinutes);
@@ -315,11 +317,11 @@ function Timetable() {
 
   return (
     <>
-    <div className="timetable-card" style={{ width: "100vw", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", padding: "8px" }}>
-      <div style={{ display: "flex", gap: "6px", marginBottom: "16px", width: "100%", maxWidth: "100%", justifyContent: "center", alignItems: "center", boxSizing: "border-box" }} className="timetable-buttons">
-        <button style={{ flex: "1", minWidth: "80px", maxWidth: "120px" }} onClick={() => navigate("/", { replace: true })}>← Back</button>
-        <button style={{ flex: "1", minWidth: "90px", maxWidth: "130px" }} onClick={() => setShowSettings(true)}>⚙️ Settings</button>
-        <button style={{ flex: "1", minWidth: "80px", maxWidth: "120px" }} onClick={() => navigate("/reports")}>
+    <div className="timetable-card" style={{ width: "100vw", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", padding: "16px", paddingTop: "8px" }}>
+      <div style={{ display: "flex", gap: "8px", marginBottom: "20px", marginTop: "8px", width: "100%", maxWidth: "100%", justifyContent: "center", alignItems: "center", boxSizing: "border-box" }} className="timetable-buttons">
+        <button style={{ flex: "1", minWidth: "80px", maxWidth: "120px", padding: "12px 8px", fontSize: "14px" }} onClick={() => navigate("/", { replace: true })}>← Back</button>
+        <button style={{ flex: "1", minWidth: "90px", maxWidth: "130px", padding: "12px 8px", fontSize: "14px" }} onClick={() => setShowSettings(true)}>⚙️ Settings</button>
+        <button style={{ flex: "1", minWidth: "80px", maxWidth: "120px", padding: "12px 8px", fontSize: "14px" }} onClick={() => navigate("/reports")}>
           Next →
         </button>
       </div>
