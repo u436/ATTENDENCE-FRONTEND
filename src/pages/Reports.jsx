@@ -11,6 +11,8 @@ function Reports() {
   const [monthInput, setMonthInput] = useState("");
   const [dayInput, setDayInput] = useState("");
   const [subjectInput, setSubjectInput] = useState("all");
+  const hasManualDate = yearInput.trim() || monthInput.trim() || dayInput.trim();
+  const isFullDateSearch = yearInput.trim() && monthInput.trim() && dayInput.trim();
   const normalizeDate = (y, m, d) => {
     if (!y || !m || !d) return "";
     const month = m.length === 1 ? `0${m}` : m;
@@ -21,8 +23,8 @@ function Reports() {
   const selectedDate = useMemo(() => {
     const manual = normalizeDate(yearInput.trim(), monthInput.trim(), dayInput.trim());
     if (manual) return manual;
-    return date || "";
-  }, [yearInput, monthInput, dayInput, date]);
+    return hasManualDate ? "" : (date || "");
+  }, [yearInput, monthInput, dayInput, date, hasManualDate]);
 
   const selectedDayName = useMemo(() => {
     if (!selectedDate) return "";
@@ -34,6 +36,16 @@ function Reports() {
     if (!selectedDate || !selectedDayName) return "";
     return `${selectedDate}-${selectedDayName}`;
   }, [selectedDate, selectedDayName]);
+
+  const holidayNoteForSelectedDate = useMemo(() => {
+    if (!hasManualDate) return "";
+    if (!selectedDateKeyWithDay || !selectedDayName) return "";
+    // If there is an override timetable for this date, do not treat as holiday
+    if (dateTimetableOverride?.[selectedDateKeyWithDay]) return "";
+    if (holidayByDate[selectedDateKeyWithDay]) return holidayByDate[selectedDateKeyWithDay];
+    if (holidayByDay[selectedDayName]) return holidayByDay[selectedDayName];
+    return "";
+  }, [hasManualDate, selectedDateKeyWithDay, selectedDayName, holidayByDate, holidayByDay, dateTimetableOverride]);
 
   const scheduleForSelectedDate = useMemo(() => {
     if (!selectedDayName) return [];
@@ -166,49 +178,16 @@ function Reports() {
   }, [dailySubjectStats]);
 
   const monthlyAverage = useMemo(() => {
-    const monthKey = (() => {
-      if (yearInput && monthInput) {
-        const m = monthInput.trim().padStart(2, "0");
-        return `${yearInput.trim()}-${m}`;
-      }
-      if (selectedDate) {
-        return selectedDate.slice(0, 7);
-      }
-      return "";
-    })();
-    if (!monthKey) return 0;
-    
-    let totalPresents = 0;
-    let totalClasses = 0;
-    const processedDates = new Set();
-    
-    // Iterate through attendance data
-    Object.entries(attendanceDetailByDate || {}).forEach(([d, detail]) => {
-      if (!d.startsWith(monthKey)) return;
-      const dayName = new Date(d).toLocaleDateString("en-US", { weekday: "long" });
-      const dateKeyWithDay = `${d}-${dayName}`;
-      if (holidayByDate[dateKeyWithDay] && !dateTimetableOverride[dateKeyWithDay]) return;
-      
-      let dayClasses = 0;
-      let dayPresents = 0;
-      
-      Object.values(detail || {}).forEach(({ subject, status, weight }) => {
-        if (!subject) return;
-        const wNum = Number(weight);
-        const w = Number.isFinite(wNum) && wNum > 0 ? wNum : 1;
-        dayClasses += w;
-        if (status === "present") {
-          dayPresents += w;
-        }
-      });
-      
-      totalClasses += dayClasses;
-      totalPresents += dayPresents;
-      processedDates.add(d);
-    });
-    
+    if (monthlySubjectStats.length === 0) return 0;
+    // Only include subjects that have actual classes recorded
+    const subjectsWithClasses = monthlySubjectStats.filter(stat => (stat.total || 0) > 0);
+    if (subjectsWithClasses.length === 0) return 0;
+    // Weighted average formula: sum(present × count) / sum(total × count) × 100
+    // Note: stat.present and stat.total already include weights/counts from attendanceDetailByDate
+    const totalPresents = subjectsWithClasses.reduce((sum, stat) => sum + (stat.present || 0), 0);
+    const totalClasses = subjectsWithClasses.reduce((sum, stat) => sum + (stat.total || 0), 0);
     return totalClasses > 0 ? Math.round((totalPresents / totalClasses) * 100) : 0;
-  }, [attendanceDetailByDate, holidayByDate, dateTimetableOverride, selectedDate, yearInput, monthInput]);
+  }, [monthlySubjectStats]);
 
   const holidayDates = useMemo(() => {
     const now = new Date();
@@ -279,6 +258,46 @@ function Reports() {
         </div>
       </div>
 
+      <h3 style={{ margin: "10px 0 6px 0" }}>Selected Day Details</h3>
+      <div className="report-section" style={{ padding: 10, marginBottom: 10 }}>
+        {!selectedDate ? (
+          <p style={{ margin: 0 }}>Pick a date to view its timetable.</p>
+        ) : holidayNoteForSelectedDate ? (
+          <p style={{ margin: 0, color: "#ff9800", fontWeight: 700 }}>🌴 Holiday: {holidayNoteForSelectedDate}</p>
+        ) : scheduleForSelectedDate.length === 0 && isFullDateSearch ? (
+          <p style={{ margin: 0, color: "#666", fontStyle: "italic" }}>No timetable found for this date.</p>
+        ) : scheduleForSelectedDate.length === 0 ? (
+          null
+        ) : (
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0" }}>S.No</th>
+                <th style={{ textAlign: "left", padding: 6, border: "1px solid #e0e0e0" }}>Subject</th>
+                <th style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0" }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scheduleForSelectedDate.map((row, idx) => {
+                const detail = attendanceDetailByDate[selectedDate]?.[idx];
+                const status = detail?.status || row.status || "—";
+                return (
+                  <tr key={`sel-${idx}`}>
+                    <td style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0" }}>{row.sno || idx + 1}</td>
+                    <td style={{ textAlign: "left", padding: 6, border: "1px solid #e0e0e0" }}>{row.subject || `Period ${idx + 1}`}</td>
+                    <td style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0", color: status === "present" ? "#2e7d32" : status === "absent" ? "#c62828" : "#666" }}>
+                      {status === "present" ? "Present" : status === "absent" ? "Absent" : "Not marked"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {!isFullDateSearch && (
+        <>
       <h3 style={{ margin: "8px 0 4px 0" }}>Today - Attendance by Subject</h3>
       <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {dailySubjectStats.length === 0 ? (
@@ -302,7 +321,11 @@ function Reports() {
           </table>
         )}
       </div>
+        </>
+      )}
 
+      {!isFullDateSearch && (
+        <>
       <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Attendance by Subject</h3>
       <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
@@ -326,7 +349,11 @@ function Reports() {
           </table>
         )}
       </div>
+        </>
+      )}
 
+      {!isFullDateSearch && (
+        <>
       <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Average by Subject</h3>
       <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
@@ -354,7 +381,11 @@ function Reports() {
           </table>
         )}
       </div>
+        </>
+      )}
 
+      {!isFullDateSearch && (
+        <>
       {/* Holiday List */}
       <h3 style={{ margin: "8px 0 4px 0" }}>🌴 Holidays</h3>
       <div style={{ maxHeight: 240, overflowY: "auto", padding: 8, backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "8px" }}>
@@ -382,6 +413,8 @@ function Reports() {
           </ul>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

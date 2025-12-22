@@ -382,27 +382,34 @@ function Timetable() {
                   <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center" }}>{cls.sno}</td>
                   <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontSize: "0.85rem" }}>{cls.time || '-'}</td>
                   <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center" }}>
-                    {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
-                    <span
-                      title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
-                      className="attendance-circle"
-                      style={{
-                        display: "inline-block",
-                        width: "32px",
-                        height: "32px",
-                        borderRadius: "50%",
-                        background: "#ffffff",
-                        color: "#ff9800",
-                        fontWeight: "bold",
-                        fontSize: "12px",
-                        lineHeight: "32px",
-                        textAlign: "center",
-                        marginLeft: "6px",
-                        border: "1px solid #eee",
-                      }}
-                    >
-                      {subjectAttendance[cls.subject] ?? 0}%
-                    </span>
+                    <div className="subject-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", flexWrap: "nowrap", maxWidth: "100%" }}>
+                      <span style={{ display: "inline-block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "160px" }}>
+                        {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
+                      </span>
+                      <span
+                        title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
+                        className="attendance-circle"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          minWidth: "40px",
+                          height: "32px",
+                          padding: "0 6px",
+                          borderRadius: "16px",
+                          background: "#ffffff",
+                          color: "#ff9800",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                          lineHeight: "1",
+                          textAlign: "center",
+                          whiteSpace: "nowrap",
+                          border: "1px solid #eee",
+                        }}
+                      >
+                        {subjectAttendance[cls.subject] ?? 0}%
+                      </span>
+                    </div>
                   </td>
                   <td style={{ padding: "6px 2px", border: "1px solid #ddd", textAlign: "center" }}>
                     <button 

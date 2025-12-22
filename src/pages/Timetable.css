@@ -120,6 +120,11 @@
   border: 1px solid #ddd !important;
 }
 
+.subject-badge {
+  width: 100%;
+  justify-content: center;
+}
+
 /* Mobile Responsive Styles for Timetable Page */
 @media (max-width: 768px) {
   /* Fix container width */
@@ -206,6 +211,11 @@
   /* Status buttons */
   .timetable-card table td:nth-child(4) {
     padding: 4px 2px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
   }
 
   .timetable-card table td button {
@@ -309,6 +319,8 @@
   .timetable-card table td:nth-child(4) {
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     gap: 3px !important;
     padding: 4px 2px !important;
   }

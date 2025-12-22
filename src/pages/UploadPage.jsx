@@ -738,30 +738,30 @@ function UploadPage() {
 					<p style={{ fontSize: "12px", color: "#666", marginBottom: "16px", lineHeight: "1.5" }}>
 						Enter the number of periods (classes) for each subject.
 					</p>
-					<div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "16px", maxHeight: "calc(85vh - 200px)", overflowY: "auto", paddingRight: "8px" }}>
+					<div style={{ display: "flex", flexDirection: "column", gap: "4px", marginBottom: "12px", maxHeight: "55vh", overflowY: "auto", paddingRight: "8px" }}>
 						{pendingSubjects.map((subject, idx) => (
 							<div 
 								key={subject} 
 								style={{ 
-									display: "flex", 
-									alignItems: "center", 
-									gap: "8px",
+									display: "flex",
+									alignItems: "center",
+									gap: "4px",
 									flexWrap: "wrap",
 									justifyContent: "space-between",
-									padding: "8px 10px",
+									padding: "4px 6px",
 									backgroundColor: "#f4e8d0",
 									borderRadius: "8px",
-									border: "2px solid #d4b896",
+									border: "1.5px solid #d4b896",
 									transition: "all 0.2s ease",
-									minHeight: "40px"
+									minHeight: "28px"
 								}}
 							>
 								<label style={{ 
-									minWidth: "100px",
-									flex: "1 1 120px",
-									fontWeight: 600, 
+									minWidth: "80px",
+									flex: "1 1 100px",
+									fontWeight: 600,
 									color: "#1976d2",
-									fontSize: "14px"
+									fontSize: "12px"
 								}}>
 									{subject}:
 								</label>
@@ -769,6 +769,7 @@ function UploadPage() {
 									type="number"
 									min="1"
 									max="5"
+									step="1"
 									value={subjectDayConfig[subject] ?? 1}
 									onKeyDown={(e) => {
 										e.preventDefault();
@@ -783,10 +784,11 @@ function UploadPage() {
 										}
 									}}
 									style={{ 
-										width: "35px", 
-										padding: "4px 2px", 
+										width: "38px",
+										height: "24px",
+										padding: "2px 0",
 										textAlign: "center", 
-										fontSize: "14px",
+										fontSize: "12px",
 										fontWeight: "600",
 										border: "2px solid #1976d2",
 										borderRadius: "6px",
@@ -794,6 +796,7 @@ function UploadPage() {
 										color: "#1976d2",
 										outline: "none",
 										transition: "all 0.2s ease",
+										appearance: "auto",
 										WebkitAppearance: "auto",
 										MozAppearance: "textfield",
 										cursor: "default"
@@ -807,7 +810,7 @@ function UploadPage() {
 										e.target.style.boxShadow = "none";
 									}}
 								/>
-								<span style={{ fontSize: "13px", color: "#757575", fontWeight: "500" }}>periods</span>
+								<span style={{ fontSize: "11px", color: "#757575", fontWeight: "500" }}>periods</span>
 							</div>
 						))}
 					</div>
