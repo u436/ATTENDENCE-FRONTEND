@@ -712,7 +712,7 @@ function UploadPage() {
 						📚 How many periods per subject?
 					</h3>
 					<p style={{ fontSize: "14px", color: "#666", marginBottom: "24px", lineHeight: "1.5" }}>
-						Enter the number of periods (classes) for each subject (1-5).
+						Enter the number of periods (classes) for each subject.
 					</p>
 					<div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "24px" }}>
 						{pendingSubjects.map((subject, idx) => (
@@ -749,7 +749,8 @@ function UploadPage() {
 									type="number"
 									min="1"
 									max="5"
-									placeholder="Enter"
+									placeholder="1-5"
+									inputMode="numeric"
 									value={subjectDayConfig[subject] ?? ""}
 									onChange={(e) => {
 										const val = e.target.value === "" ? "" : parseInt(e.target.value);

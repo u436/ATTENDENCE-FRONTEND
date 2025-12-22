@@ -1,7 +1,7 @@
 /* Reports Page Specific Styles */
 
 .reports-container {
-  max-width: 900px;
+  /* Uses default centered-card max-width for consistency */
 }
 
 .reports-input-grid {

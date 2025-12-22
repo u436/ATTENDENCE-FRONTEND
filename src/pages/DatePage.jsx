@@ -130,6 +130,7 @@ function DatePage() {
         placeholder="Day (Monday)"
         value={localDay || ""}
         readOnly
+        tabIndex={-1}
         className="day-input"
       />
 
