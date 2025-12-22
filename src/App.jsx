@@ -23,15 +23,17 @@ function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/date" element={<DatePage />} />
-      <Route path="/upload" element={<UploadPage />} />
-      <Route path="/timetable" element={<Timetable />} />
-      <Route path="/reports" element={<Reports />} />
+    <div className="center-screen">
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/date" element={<DatePage />} />
+        <Route path="/upload" element={<UploadPage />} />
+        <Route path="/timetable" element={<Timetable />} />
+        <Route path="/reports" element={<Reports />} />
 
-      {/* Add other routes here if needed */}
-    </Routes>
+        {/* Add other routes here if needed */}
+      </Routes>
+    </div>
   );
 }
 
