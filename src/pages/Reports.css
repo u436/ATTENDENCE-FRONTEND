@@ -48,10 +48,16 @@
   /* Adjust table in reports for mobile */
   .report-section table {
     font-size: 12px;
-    width: 100%;
-    min-width: 100%;
+    width: 100% !important;
+    display: table !important;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: auto;
+  }
+
+  .report-section {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
   }
 
   .report-section th,
@@ -60,6 +66,12 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
+    text-align: left;
+  }
+
+  .report-section th:last-child,
+  .report-section td:last-child {
+    text-align: center;
   }
 
   /* Make buttons stack on mobile */

@@ -225,7 +225,7 @@ function Reports() {
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
-          <table style={{ width: "100%", minWidth: "250px" }}>
+          <table style={{ width: "100%" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
@@ -249,7 +249,7 @@ function Reports() {
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
-          <table style={{ width: "100%", minWidth: "250px" }}>
+          <table style={{ width: "100%" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
@@ -277,7 +277,7 @@ function Reports() {
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
-          <table style={{ width: "100%", minWidth: "250px" }}>
+          <table style={{ width: "100%" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
@@ -301,7 +301,7 @@ function Reports() {
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
-          <table style={{ width: "100%", minWidth: "250px" }}>
+          <table style={{ width: "100%" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
