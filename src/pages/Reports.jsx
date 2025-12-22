@@ -171,8 +171,8 @@ function Reports() {
   return (
     <div className="centered-card reports-container">
       <div style={{ display: "flex", gap: "8px", marginBottom: 6, justifyContent: "center", alignItems: "center" }} className="reports-buttons">
-        <button onClick={() => navigate("/timetable")}>← Back</button>
-        <button onClick={() => navigate("/")}>Home</button>
+        <button style={{ flex: "1", minWidth: "100px", maxWidth: "150px" }} onClick={() => navigate("/timetable")}>← Back</button>
+        <button style={{ flex: "1", minWidth: "100px", maxWidth: "150px" }} onClick={() => navigate("/")}>Home</button>
       </div>
       <h2 style={{ margin: "0 0 6px 0" }}>Reports</h2>
       <p style={{ color: "#607d8b", margin: "0 0 8px 0" }}>Pick a day/month and (optionally) a subject filter.</p>

@@ -82,12 +82,13 @@ function Landing() {
             style={{ 
               backgroundColor: "#2196F3",
               color: "white",
-              padding: "12px 20px",
+              padding: "10px 20px",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "10px",
               cursor: "pointer",
               fontWeight: 600,
-              width: "min(95vw, 320px)"
+              width: "min(95vw, 320px)",
+              minWidth: "200px"
             }}
           >
             Continue →
@@ -97,12 +98,13 @@ function Landing() {
             style={{ 
               backgroundColor: "#2196F3",
               color: "white",
-              padding: "12px 20px",
+              padding: "10px 20px",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "10px",
               cursor: "pointer",
               fontWeight: 600,
-              width: "min(95vw, 320px)"
+              width: "min(95vw, 320px)",
+              minWidth: "200px"
             }}
           >
             Start New Timetable →
@@ -115,12 +117,13 @@ function Landing() {
             style={{ 
               backgroundColor: "#2196F3",
               color: "white",
-              padding: "12px 20px",
+              padding: "10px 20px",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "10px",
               cursor: "pointer",
               fontWeight: 600,
-              width: "min(95vw, 320px)"
+              width: "min(95vw, 320px)",
+              minWidth: "200px"
             }}
           >
             Continue →

@@ -60,25 +60,37 @@ body.welcome-page, body.other-unwanted-pages {
 }
 
 .option-card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  padding: 30px 20px;
   flex: 1 1 250px;
   max-width: 300px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: none;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  color: #fff;
 }
 
 .option-card:hover {
-  transform: none;
-  box-shadow: none;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
 }
 
 .option-card .icon {
   font-size: 3rem;
   margin-bottom: 20px;
+}
+
+.option-card h3 {
+  color: #fff;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.option-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
 }
 
 /* Upload Section */

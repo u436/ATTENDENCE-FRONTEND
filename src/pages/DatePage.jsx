@@ -138,9 +138,9 @@ function DatePage() {
         style={{ width: "100%", maxWidth: "400px" }}
       />
 
-      <div className="button-row" style={{ gap: "8px", width: "100%", maxWidth: "400px" }}>
-        <button onClick={() => navigate("/", { replace: true })}>← Back</button>
-        <button onClick={handleNext}>Next →</button>
+      <div className="button-row" style={{ display: "flex", gap: "8px", width: "100%", maxWidth: "400px", justifyContent: "center" }}>
+        <button style={{ flex: 1, minWidth: "100px", maxWidth: "180px" }} onClick={() => navigate("/", { replace: true })}>← Back</button>
+        <button style={{ flex: 1, minWidth: "100px", maxWidth: "180px" }} onClick={handleNext}>Next →</button>
       </div>
       </div>
     </div>

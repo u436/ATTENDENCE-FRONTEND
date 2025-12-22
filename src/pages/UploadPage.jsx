@@ -435,15 +435,15 @@ function UploadPage() {
 	return (
 		<div className="upload-page-container">
 			{/* Top Back button */}
-			<div className="top-back">
+			<div className="top-back" style={{ display: "flex", justifyContent: "center" }}>
 				{option ? (
-					<button onClick={() => setOption(null)}>← Back</button>
+					<button style={{ minWidth: "100px" }} onClick={() => setOption(null)}>← Back</button>
 				) : isChangingMode ? (
 					// If timetable exists, user is changing mode from Settings - go back to Timetable
-					<button onClick={() => navigate("/timetable", { replace: true })}>← Back</button>
+					<button style={{ minWidth: "100px" }} onClick={() => navigate("/timetable", { replace: true })}>← Back</button>
 				) : (
 					// Initial setup - go back to Date page (keep date/day values)
-					<button onClick={() => navigate("/date", { replace: true })}>← Back</button>
+					<button style={{ minWidth: "100px" }} onClick={() => navigate("/date", { replace: true })}>← Back</button>
 				)}
 			</div>
 
@@ -515,9 +515,13 @@ function UploadPage() {
 								ref={(el) => (subjectInputRefs.current[i] = el)}
 								onKeyDown={(e) => {
 									if (e.key === "Enter" && (e.currentTarget.value || "").trim().length > 0) {
-										// Add a new empty box and focus it
+										// Add a new empty box and focus it immediately without closing keyboard
+										const currentInput = e.currentTarget;
 										handleAddSubjectField();
-										setTimeout(() => subjectInputRefs.current[i + 1]?.focus(), 0);
+										setTimeout(() => {
+											const nextInput = subjectInputRefs.current[i + 1];
+											if (nextInput) nextInput.focus();
+										}, 0);
 									}
 								}}
 							/>
