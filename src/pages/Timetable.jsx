@@ -315,8 +315,8 @@ function Timetable() {
 
   return (
     <>
-    <div className="timetable-card">
-      <div style={{ display: "flex", gap: "6px", marginBottom: "24px", width: "100%", justifyContent: "center", alignItems: "center" }} className="timetable-buttons">
+    <div className="timetable-card" style={{ width: "100vw", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", padding: "8px" }}>
+      <div style={{ display: "flex", gap: "6px", marginBottom: "16px", width: "100%", maxWidth: "100%", justifyContent: "center", alignItems: "center", boxSizing: "border-box" }} className="timetable-buttons">
         <button style={{ flex: "1", minWidth: "80px", maxWidth: "120px" }} onClick={() => navigate("/", { replace: true })}>← Back</button>
         <button style={{ flex: "1", minWidth: "90px", maxWidth: "130px" }} onClick={() => setShowSettings(true)}>⚙️ Settings</button>
         <button style={{ flex: "1", minWidth: "80px", maxWidth: "120px" }} onClick={() => navigate("/reports")}>
@@ -324,7 +324,7 @@ function Timetable() {
         </button>
       </div>
       <Settings isOpen={showSettings} onClose={() => setShowSettings(false)} />
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px", margin: "0", padding: "0", marginTop: "16px", width: "100%", maxWidth: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px", margin: "0", padding: "0", width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
         <h2 style={{ margin: "0", padding: "0", lineHeight: "1.1", fontSize: "1.4rem" }}>Today's Classes</h2>
         
         {date && day && (
@@ -341,21 +341,22 @@ function Timetable() {
           </div>
         )}
         
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%", maxWidth: "100%", overflow: "hidden", boxSizing: "border-box" }}>
           {timetable.length > 0 && !holidayNote && !isFutureDate && (
             <button 
               onClick={handleMarkAsHoliday}
               style={{ 
                 backgroundColor: "#4CAF50", 
                 color: "white", 
-                padding: "8px 16px",
+                padding: "10px 16px",
                 border: "none",
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontWeight: "600",
                 fontSize: "0.95rem",
                 maxWidth: "100%",
-                width: "100%"
+                width: "100%",
+                boxSizing: "border-box"
               }}
             >
               🌴 Mark This Day as Holiday
@@ -363,22 +364,22 @@ function Timetable() {
           )}
         
           {displayedTimetable.length > 0 && (
-            <div style={{ width: "100%", maxWidth: "100%", overflowX: "auto", boxSizing: "border-box" }}>
-            <table style={{ borderCollapse: "collapse", width: "100%", minWidth: "100%", margin: "0", fontSize: "1.05rem", lineHeight: "1.6", tableLayout: "auto" }}>
+            <div style={{ width: "100%", maxWidth: "100%", overflowX: "auto", boxSizing: "border-box", WebkitOverflowScrolling: "touch" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%", minWidth: "100%", margin: "0", fontSize: "1rem", lineHeight: "1.4", tableLayout: "fixed" }}>
               <thead>
                 <tr style={{ backgroundColor: "#f5f5f5" }}>
-                  <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>S.No</th>
-                  <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Time</th>
-                  <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Subject</th>
-                  <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Status</th>
+                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>S.No</th>
+                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>Time</th>
+                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>Subject</th>
+                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {displayedTimetable.map((cls, idx) => (
                   <tr key={idx}>
-                  <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>{cls.sno}</td>
-                  <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>{cls.time || '-'}</td>
-                  <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>
+                  <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center" }}>{cls.sno}</td>
+                  <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontSize: "0.85rem" }}>{cls.time || '-'}</td>
+                  <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center" }}>
                     {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
                     <span
                       title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
@@ -391,28 +392,29 @@ function Timetable() {
                         background: "#ffffff",
                         color: "#ff9800",
                         fontWeight: "bold",
-                        fontSize: "13px",
+                        fontSize: "12px",
                         lineHeight: "32px",
                         textAlign: "center",
-                        marginLeft: "8px",
+                        marginLeft: "6px",
                         border: "1px solid #eee",
                       }}
                     >
                       {subjectAttendance[cls.subject] ?? 0}%
                     </span>
                   </td>
-                  <td style={{ padding: "5px 2px", border: "1px solid #ddd", textAlign: "center" }}>
+                  <td style={{ padding: "6px 2px", border: "1px solid #ddd", textAlign: "center" }}>
                     <button 
                       onClick={() => handleStatusClick(idx, "present")}
                       style={{
-                        padding: "6px 10px",
-                        fontSize: "0.9rem",
+                        padding: "7px 10px",
+                        fontSize: "0.85rem",
                         backgroundColor: cls.status === 'present' ? '#4CAF50' : '',
                         color: cls.status === 'present' ? 'white' : '',
                         opacity: 1,
                         cursor: 'pointer',
                         border: "1px solid #ccc",
-                        borderRadius: "2px"
+                        borderRadius: "2px",
+                        marginRight: "2px"
                       }}
                     >
                       Present
@@ -420,15 +422,14 @@ function Timetable() {
                     <button 
                       onClick={() => handleStatusClick(idx, "absent")}
                       style={{
-                        padding: "6px 10px",
-                        fontSize: "0.9rem",
+                        padding: "7px 10px",
+                        fontSize: "0.85rem",
                         backgroundColor: cls.status === 'absent' ? '#f44336' : '',
                         color: cls.status === 'absent' ? 'white' : '',
                         opacity: 1,
                         cursor: 'pointer',
                         border: "1px solid #ccc",
-                        borderRadius: "2px",
-                        marginLeft: "3px"
+                        borderRadius: "2px"
                       }}
                     >
                       Absent
@@ -444,14 +445,14 @@ function Timetable() {
       </div>
 
       {(holidayNote || isFutureDate) && (
-        <div style={{ margin: "0 !important" }}>
+        <div style={{ margin: "16px 0 0 0", width: "100%", boxSizing: "border-box" }}>
           {holidayNote && (
-            <div style={{ padding: 4, border: "1px dashed #ff9800", borderRadius: 8, background: "#fff7e6", color: "#c26600", fontWeight: 600, fontSize: "0.9rem", margin: "0 !important" }}>
+            <div style={{ padding: "8px", border: "1px dashed #ff9800", borderRadius: "8px", background: "#fff7e6", color: "#c26600", fontWeight: "600", fontSize: "0.9rem", marginBottom: "8px" }}>
               {holidayNote}
             </div>
           )}
           {isFutureDate && (
-            <div style={{ padding: 4, border: "1px dashed #90caf9", borderRadius: 8, background: "#e3f2fd", color: "#1565c0", fontWeight: 600, fontSize: "0.9rem", margin: "0 !important" }}>
+            <div style={{ padding: "8px", border: "1px dashed #90caf9", borderRadius: "8px", background: "#e3f2fd", color: "#1565c0", fontWeight: "600", fontSize: "0.9rem", marginBottom: "8px" }}>
               Future date selected — attendance actions are disabled.
             </div>
           )}
@@ -466,7 +467,9 @@ function Timetable() {
                 borderRadius: "5px",
                 cursor: "pointer",
                 fontWeight: "600",
-                fontSize: "0.95rem"
+                fontSize: "0.95rem",
+                width: "100%",
+                boxSizing: "border-box"
               }}
             >
               ✕ Unmark as Holiday
