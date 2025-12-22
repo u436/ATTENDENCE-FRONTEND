@@ -1,0 +1,114 @@
+/* Timetable Page Specific Styles */
+
+/* Mobile Responsive Styles for Timetable Page */
+@media (max-width: 768px) {
+  .timetable-buttons {
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
+
+  .timetable-buttons button {
+    flex: 1;
+    min-width: 100px;
+    margin: 3px !important;
+  }
+
+  /* Date and Day display - ensure it stays horizontal */
+  .date-day-display {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .date-day-display span {
+    white-space: nowrap;
+  }
+
+  /* Timetable table adjustments */
+  .timetable-table {
+    font-size: 12px;
+  }
+
+  .timetable-table th,
+  .timetable-table td {
+    padding: 6px !important;
+  }
+
+  .timetable-table button {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    margin: 2px !important;
+  }
+
+  /* Attendance percentage circle */
+  .attendance-circle {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 10px !important;
+    line-height: 24px !important;
+  }
+
+  /* Override modal on mobile */
+  .override-modal-content {
+    min-width: 300px !important;
+    max-width: 95% !important;
+    padding: 20px !important;
+  }
+
+  .override-modal-content h3 {
+    font-size: 18px !important;
+  }
+
+  .override-modal-content p {
+    font-size: 13px !important;
+  }
+
+  .override-modal-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .override-modal-buttons button {
+    width: 100%;
+    margin: 5px 0 !important;
+  }
+
+  /* Copy template section */
+  .copy-template-section {
+    padding: 15px !important;
+  }
+
+  .copy-template-section p {
+    font-size: 14px !important;
+  }
+
+  .copy-template-section button {
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .timetable-table th:first-child,
+  .timetable-table td:first-child {
+    display: none;
+  }
+
+  .date-day-display {
+    font-size: 14px;
+  }
+
+  /* Make Present/Absent buttons stack vertically on very small screens */
+  .timetable-table td:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .timetable-table td:last-child button {
+    width: 100%;
+  }
+}

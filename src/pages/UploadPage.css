@@ -134,3 +134,90 @@ body.welcome-page, body.other-unwanted-pages {
   cursor: pointer;
   transition: 0.2s;
 }
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .upload-page-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 95%;
+  }
+
+  .upload-page-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .upload-page-container h2 {
+    font-size: 1.3rem;
+  }
+
+  .upload-page-container h3 {
+    font-size: 1.1rem;
+  }
+
+  .options-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .option-card {
+    max-width: 100%;
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .option-card .icon {
+    font-size: 2.5rem;
+  }
+
+  .upload-section,
+  .add-subject-section {
+    padding: 15px;
+  }
+
+  .add-subject-section input {
+    width: 100%;
+  }
+
+  .upload-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .upload-buttons button {
+    width: 100%;
+  }
+
+  .date-box {
+    display: inline-block;
+    margin: 5px;
+  }
+
+  .modal-content {
+    max-width: 95% !important;
+    padding: 20px !important;
+  }
+
+  .modal-content h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .modal-content button {
+    padding: 8px 15px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-page-container {
+    padding: 15px;
+  }
+
+  .upload-page-container h1 {
+    font-size: 1.3rem;
+  }
+
+  .option-card .icon {
+    font-size: 2rem;
+  }
+}

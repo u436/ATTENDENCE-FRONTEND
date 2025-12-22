@@ -12,7 +12,7 @@ function UploadPage() {
 	const isChangingMode = timetablesByDay && timetablesByDay[day];
 
 	const [option, setOption] = useState(null); // "upload" or "add"
-	const [subjects, setSubjects] = useState([]);
+	const [subjects, setSubjects] = useState([""]);
 	const [file, setFile] = useState(null);
 	const [showHolidayModal, setShowHolidayModal] = useState(false);
 	const [selectedHolidays, setSelectedHolidays] = useState([]);
@@ -35,8 +35,8 @@ function UploadPage() {
 				setSubjects(existingSubjects);
 			}
 		} else if (option === "add" && !isChangingMode) {
-			// For new users, reset to empty array when opening "Add Subjects"
-			setSubjects([]);
+			// For new users, start with one empty input box
+			setSubjects([""]);
 		}
 	}, [day, timetablesByDay, isChangingMode, option]);
 
@@ -499,7 +499,7 @@ function UploadPage() {
 						<div key={i} style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center" }}>
 							<input
 								type="text"
-								placeholder={`Subject ${i + 1}`}
+								placeholder=""
 								value={subj}
 								onChange={(e) => handleSubjectChange(i, e.target.value)}
 								style={{ flex: 1 }}

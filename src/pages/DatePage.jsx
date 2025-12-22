@@ -60,7 +60,6 @@ function DatePage() {
 
   return (
     <div className="centered-card">
-      <button onClick={() => navigate("/", { replace: true })} style={{ marginBottom: "10px" }}>← Back</button>
       <h2>Enter Date and Day</h2>
 
       <DatePicker

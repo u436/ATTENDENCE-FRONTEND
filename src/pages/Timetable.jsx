@@ -3,6 +3,7 @@ import { useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import Settings from "../components/Settings";
+import "./Timetable.css";
 
 function Timetable() {
   const EMPTY_OVERRIDE = "__EMPTY__";
@@ -275,7 +276,7 @@ function Timetable() {
   return (
     <>
     <div className="centered-card">
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }} className="timetable-buttons">
         <button onClick={() => navigate("/", { replace: true })}>← Back</button>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
         <button onClick={() => navigate("/reports")} style={{ marginLeft: "auto" }}>
@@ -285,8 +286,10 @@ function Timetable() {
       <Settings isOpen={showSettings} onClose={() => setShowSettings(false)} />
       <h2>Today's Classes</h2>
       {date && day && (
-        <p style={{ marginTop: "-5px", marginBottom: "10px", fontWeight: "600" }}>
-          {date} | {day}
+        <p style={{ marginTop: "-5px", marginBottom: "10px", fontWeight: "600", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap" }} className="date-day-display">
+          <span>{date}</span>
+          <span>|</span>
+          <span>{day}</span>
         </p>
       )}
       {overrideSourceDay && (
@@ -297,7 +300,7 @@ function Timetable() {
       
       {/* If no schedule for this day but a template exists, offer quick copy */}
       {!holidayNote && timetable.length === 0 && anyScheduleTemplate && (
-        <div style={{ marginBottom: "15px", padding: "20px", backgroundColor: "#f0f8ff", border: "2px dashed #007bff", borderRadius: "8px", textAlign: "center" }}>
+        <div style={{ marginBottom: "15px", padding: "20px", backgroundColor: "#f0f8ff", border: "2px dashed #007bff", borderRadius: "8px", textAlign: "center" }} className="copy-template-section">
           <p style={{ marginBottom: "15px", fontSize: "16px", color: "#333" }}>
             📋 No timetable found for {day}. Copy from another day?
           </p>
@@ -374,7 +377,7 @@ function Timetable() {
         </div>
       )}
 
-      <table border="1" cellPadding="10" style={{ width: "100%" }}>
+      <table border="1" cellPadding="10" style={{ width: "100%" }} className="timetable-table">
         <thead>
           <tr>
             <th>S.No</th>
@@ -393,6 +396,7 @@ function Timetable() {
                 {/* Attendance percentage circle */}
                 <span
                   title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
+                  className="attendance-circle"
                   style={{
                     display: "inline-block",
                     width: 28,
@@ -444,7 +448,7 @@ function Timetable() {
     </div>
     {showOverrideModal && (
       <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-        <div style={{ backgroundColor: "white", padding: "28px", borderRadius: "12px", minWidth: "420px", maxWidth: "90%", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
+        <div style={{ backgroundColor: "white", padding: "28px", borderRadius: "12px", minWidth: "420px", maxWidth: "90%", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} className="override-modal-content">
           <h3 style={{ marginTop: 0, marginBottom: "12px", color: "#1976d2", fontSize: "22px" }}>📅 Select Timetable to Apply</h3>
           <p style={{ color: "#555", marginBottom: "20px", fontSize: "14px", lineHeight: "1.5" }}>
             This date was marked as a holiday. Choose a normal weekday timetable to use for this date.
@@ -494,7 +498,7 @@ function Timetable() {
               </div>
             )}
           </div>
-          <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }} className="override-modal-buttons">
             <button 
               onClick={() => { setShowOverrideModal(false); setSelectedOverrideDay(""); }} 
               style={{ 

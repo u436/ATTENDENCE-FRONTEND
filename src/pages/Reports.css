@@ -1,0 +1,97 @@
+/* Reports Page Specific Styles */
+
+.reports-container {
+  max-width: 900px;
+}
+
+.reports-input-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* Mobile Responsive Styles for Reports Page */
+@media (max-width: 768px) {
+  .reports-container {
+    max-width: 100%;
+    padding: 15px !important;
+  }
+
+  .reports-input-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .reports-input-grid > div {
+    width: 100%;
+  }
+
+  .reports-input-grid input,
+  .reports-input-grid select {
+    width: 100%;
+    font-size: 14px !important;
+    padding: 6px !important;
+  }
+
+  .reports-input-grid label {
+    font-size: 11px !important;
+  }
+
+  /* Make report sections scrollable */
+  .report-section {
+    max-height: 200px !important;
+    overflow-y: auto;
+  }
+
+  /* Adjust table in reports for mobile */
+  .report-section table {
+    font-size: 12px;
+  }
+
+  .report-section th,
+  .report-section td {
+    padding: 6px !important;
+  }
+
+  /* Make buttons stack on mobile */
+  .reports-buttons {
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
+
+  .reports-buttons button {
+    flex: 1;
+    min-width: 80px;
+    margin: 3px !important;
+  }
+
+  /* Holiday list mobile adjustments */
+  .holiday-list {
+    max-height: 180px !important;
+  }
+
+  .holiday-list li {
+    font-size: 13px !important;
+    padding: 6px 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .reports-input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-container h2 {
+    font-size: 1.3rem;
+  }
+
+  .reports-container h3 {
+    font-size: 1.1rem;
+  }
+
+  .reports-container p {
+    font-size: 13px;
+  }
+}

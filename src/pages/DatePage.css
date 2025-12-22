@@ -31,3 +31,34 @@
   color: #000;
   border-radius: 4px;
 }
+
+/* Mobile Responsive Styles for Date Page */
+@media (max-width: 768px) {
+  .centered-card {
+    padding: 20px;
+  }
+
+  .custom-datepicker {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .day-input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .button-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .button-row button {
+    flex: 1;
+  }
+
+  .month-name {
+    font-size: 1rem !important;
+  }
+}
