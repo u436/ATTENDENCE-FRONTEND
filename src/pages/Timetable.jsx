@@ -120,9 +120,9 @@ function Timetable() {
     const totals = {};
     const presents = {};
     
-    // First, count today's timetable rows for totals (all periods, marked or not)
+    // First, count today's timetable rows for totals (only marked periods)
     displayedTimetable.forEach((row) => {
-      if (!row.subject) return;
+      if (!row.subject || !row.status) return; // Skip unmarked periods
       const w = weightForRow(row);
       totals[row.subject] = (totals[row.subject] || 0) + w;
       // Count presents based on status
@@ -316,7 +316,7 @@ function Timetable() {
   return (
     <>
     <div className="timetable-card">
-      <div style={{ display: "flex", gap: "6px", marginBottom: "4px" }} className="timetable-buttons">
+      <div style={{ display: "flex", gap: "6px", marginBottom: "0" }} className="timetable-buttons">
         <button onClick={() => navigate("/", { replace: true })}>← Back</button>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
         <button onClick={() => navigate("/reports")} style={{ marginLeft: "auto" }}>
@@ -324,77 +324,130 @@ function Timetable() {
         </button>
       </div>
       <Settings isOpen={showSettings} onClose={() => setShowSettings(false)} />
-      <h2 style={{ margin: "0 0 2px 0" }}>Today's Classes</h2>
-      {date && day && (
-        <p style={{ marginTop: "0", marginBottom: "2px", fontWeight: "600", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap" }} className="date-day-display">
-          <span>{date}</span>
-          <span>|</span>
-          <span>{day}</span>
-        </p>
-      )}
-      {overrideSourceDay && overrideSourceDay !== key && (
-        <div style={{ padding: 6, border: "1px dashed #7cb342", borderRadius: 6, background: "#f1f8e9", color: "#33691e", fontWeight: 600, marginBottom: 2 }}>
-          {overrideSourceDay === EMPTY_OVERRIDE ? "This date is active (not a holiday) with no timetable selected" : `Using ${overrideSourceDay} timetable for this date`}
-        </div>
-      )}
-      
-      {/* If no schedule for this day but a template exists, offer quick copy */}
-      {!holidayNote && timetable.length === 0 && anyScheduleTemplate && (
-        <div style={{ marginBottom: "4px", padding: "8px", backgroundColor: "#f0f8ff", border: "2px dashed #007bff", borderRadius: "8px", textAlign: "center" }} className="copy-template-section">
-          <p style={{ marginBottom: "6px", fontSize: "16px", color: "#333" }}>
-            📋 No timetable found for {day}. Copy from another day?
+      <div style={{ display: "flex", flexDirection: "column", gap: "3px", margin: "0", padding: "0", marginTop: "12px" }}>
+        <h2 style={{ margin: "0", padding: "0", lineHeight: "1.1", fontSize: "1.4rem" }}>Today's Classes</h2>
+        
+        {date && day && (
+          <p style={{ margin: "0", padding: "0", fontWeight: "600", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap", lineHeight: "1", fontSize: "1rem" }} className="date-day-display">
+            <span>{date}</span>
+            <span>|</span>
+            <span>{day}</span>
           </p>
-          <button
-            onClick={handleCopyTemplateToDay}
-            style={{
-              backgroundColor: "#007bff",
-              color: "white",
-              padding: "15px 30px",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontWeight: "600",
-              fontSize: "16px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.2)"
-            }}
-          >
-            📋 Copy Existing Timetable to {day}
-          </button>
-          <p style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}>
-            Or go to Settings → Change Timetable Mode to upload a new one
-          </p>
-        </div>
-      )}
-      
-      {/* Mark as Holiday Section */}
-      {timetable.length > 0 && !holidayNote && !isFutureDate && (
-        <div style={{ marginBottom: "2px" }}>
+        )}
+        
+        {overrideSourceDay && overrideSourceDay !== key && (
+          <div style={{ padding: "4px", border: "1px dashed #7cb342", borderRadius: "4px", background: "#f1f8e9", color: "#33691e", fontWeight: "600", fontSize: "0.9rem" }}>
+            {overrideSourceDay === EMPTY_OVERRIDE ? "This date is active (not a holiday) with no timetable selected" : `Using ${overrideSourceDay} timetable for this date`}
+          </div>
+        )}
+        
+        {timetable.length > 0 && !holidayNote && !isFutureDate && (
           <button 
             onClick={handleMarkAsHoliday}
             style={{ 
               backgroundColor: "#4CAF50", 
               color: "white", 
-              padding: "10px 20px",
+              padding: "8px 16px",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "4px",
               cursor: "pointer",
-              fontWeight: "600"
+              fontWeight: "600",
+              fontSize: "0.95rem"
             }}
           >
             🌴 Mark This Day as Holiday
           </button>
-        </div>
-      )}
+        )}
+        
+        {displayedTimetable.length > 0 && (
+          <table style={{ borderCollapse: "collapse", width: "100%", margin: "0", fontSize: "1.05rem", lineHeight: "1.6" }}>
+            <thead>
+              <tr style={{ backgroundColor: "#f5f5f5" }}>
+                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Period</th>
+                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Time</th>
+                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "left", fontWeight: "600", fontSize: "1rem" }}>Subject</th>
+                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedTimetable.map((cls, idx) => (
+                <tr key={idx}>
+                  <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>{cls.sno}</td>
+                  <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>{cls.time || '-'}</td>
+                  <td style={{ padding: "7px 5px", border: "1px solid #ddd" }}>
+                    {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
+                    <span
+                      title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
+                      className="attendance-circle"
+                      style={{
+                        display: "inline-block",
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "50%",
+                        background: "#ffffff",
+                        color: "#ff9800",
+                        fontWeight: "bold",
+                        fontSize: "13px",
+                        lineHeight: "32px",
+                        textAlign: "center",
+                        marginLeft: "8px",
+                        border: "1px solid #eee",
+                      }}
+                    >
+                      {subjectAttendance[cls.subject] ?? 0}%
+                    </span>
+                  </td>
+                  <td style={{ padding: "5px 2px", border: "1px solid #ddd", textAlign: "center" }}>
+                    <button 
+                      onClick={() => handleStatusClick(idx, "present")}
+                      disabled={!!holidayNote || isFutureDate}
+                      style={{
+                        padding: "6px 10px",
+                        fontSize: "0.9rem",
+                        backgroundColor: cls.status === 'present' ? '#4CAF50' : '',
+                        color: cls.status === 'present' ? 'white' : '',
+                        opacity: (holidayNote || isFutureDate) ? 0.6 : 1,
+                        cursor: (holidayNote || isFutureDate) ? 'not-allowed' : 'pointer',
+                        border: "1px solid #ccc",
+                        borderRadius: "2px"
+                      }}
+                    >
+                      Present
+                    </button>
+                    <button 
+                      onClick={() => handleStatusClick(idx, "absent")}
+                      disabled={!!holidayNote || isFutureDate}
+                      style={{
+                        padding: "6px 10px",
+                        fontSize: "0.9rem",
+                        backgroundColor: cls.status === 'absent' ? '#f44336' : '',
+                        color: cls.status === 'absent' ? 'white' : '',
+                        opacity: (holidayNote || isFutureDate) ? 0.6 : 1,
+                        cursor: (holidayNote || isFutureDate) ? 'not-allowed' : 'pointer',
+                        border: "1px solid #ccc",
+                        borderRadius: "2px",
+                        marginLeft: "3px"
+                      }}
+                    >
+                      Absent
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
       {(holidayNote || isFutureDate) && (
-        <div style={{ marginBottom: "2px" }}>
+        <div style={{ margin: "0 !important" }}>
           {holidayNote && (
-            <div style={{ padding: 6, border: "1px dashed #ff9800", borderRadius: 8, background: "#fff7e6", color: "#c26600", fontWeight: 600, marginBottom: "2px" }}>
+            <div style={{ padding: 4, border: "1px dashed #ff9800", borderRadius: 8, background: "#fff7e6", color: "#c26600", fontWeight: 600, fontSize: "0.9rem", margin: "0 !important" }}>
               {holidayNote}
             </div>
           )}
           {isFutureDate && (
-            <div style={{ padding: 6, border: "1px dashed #90caf9", borderRadius: 8, background: "#e3f2fd", color: "#1565c0", fontWeight: 600, marginBottom: "2px" }}>
+            <div style={{ padding: 4, border: "1px dashed #90caf9", borderRadius: 8, background: "#e3f2fd", color: "#1565c0", fontWeight: 600, fontSize: "0.9rem", margin: "0 !important" }}>
               Future date selected — attendance actions are disabled.
             </div>
           )}
@@ -408,7 +461,8 @@ function Timetable() {
                 border: "none",
                 borderRadius: "5px",
                 cursor: "pointer",
-                fontWeight: "600"
+                fontWeight: "600",
+                fontSize: "0.95rem"
               }}
             >
               ✕ Unmark as Holiday
@@ -416,76 +470,8 @@ function Timetable() {
           )}
         </div>
       )}
-
-      <table border="1" cellPadding="6" style={{ width: "100%", tableLayout: "auto", marginTop: "0" }} className="timetable-table">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Time</th>
-            <th>Period</th>
-            <th>Present / Absent</th>
-          </tr>
-        </thead>
-        <tbody>
-          {displayedTimetable.map((cls, idx) => (
-            <tr key={idx}>
-              <td>{cls.sno}</td>
-              <td>{cls.time || '-'}</td>
-              <td>
-                {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
-                {/* Attendance percentage circle */}
-                <span
-                  title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
-                  className="attendance-circle"
-                  style={{
-                    display: "inline-block",
-                    width: 28,
-                    height: 28,
-                    borderRadius: "50%",
-                    background: "#ffffff",
-                    color: "#ff9800",
-                    fontWeight: "bold",
-                    fontSize: 12,
-                    lineHeight: "28px",
-                    textAlign: "center",
-                    marginLeft: 8,
-                    border: "2px solid #eee",
-                  }}
-                >
-                  {subjectAttendance[cls.subject] ?? 0}%
-                </span>
-              </td>
-              <td>
-                <button 
-                  onClick={() => handleStatusClick(idx, "present")}
-                  disabled={!!holidayNote || isFutureDate}
-                  style={{
-                    backgroundColor: cls.status === 'present' ? '#4CAF50' : '',
-                    color: cls.status === 'present' ? 'white' : '',
-                    opacity: (holidayNote || isFutureDate) ? 0.6 : 1,
-                    cursor: (holidayNote || isFutureDate) ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  Present
-                </button>
-                <button 
-                  onClick={() => handleStatusClick(idx, "absent")}
-                  disabled={!!holidayNote || isFutureDate}
-                  style={{
-                    backgroundColor: cls.status === 'absent' ? '#f44336' : '',
-                    color: cls.status === 'absent' ? 'white' : '',
-                    opacity: (holidayNote || isFutureDate) ? 0.6 : 1,
-                    cursor: (holidayNote || isFutureDate) ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  Absent
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
+
     {showOverrideModal && (
       <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
         <div style={{ backgroundColor: "white", padding: "28px", borderRadius: "12px", minWidth: "420px", maxWidth: "90%", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} className="override-modal-content">

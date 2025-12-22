@@ -1,13 +1,94 @@
 /* Timetable Page Specific Styles */
 
-/* Tight spacing for timetable on all screen sizes */
-.timetable-table {
+/* Force absolute zero spacing everywhere */
+/* Override global styles that add spacing */
+.timetable-card > * {
+  margin: 0 !important;
   margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Buttons - collapse spacing */
+.timetable-buttons {
+  margin-bottom: 0 !important;
+  line-height: 0 !important;
+}
+
+.timetable-buttons button {
+  line-height: 1 !important;
+}
+
+/* Content below buttons - no spacing */
+.timetable-card > div:nth-child(3) {
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.timetable-card {
+  display: block !important;
+  flex-direction: column;
+  gap: 0 !important;
+}
+
+.timetable-card h2 {
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  line-height: 1.1 !important;
+}
+
+.timetable-card p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.timetable-card .date-day-display {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.timetable-card button {
+  margin: 0 !important;
+}
+
+.timetable-card div {
+  margin: 0 !important;
+}
+
+/* Content wrapper that holds all elements below buttons */
+.timetable-card > div:last-of-type {
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Tight spacing for timetable on all screen sizes */
+.timetable-card table {
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  border-collapse: collapse !important;
+}
+
+.timetable-table {
+  margin: 0 !important;
+  padding: 0 !important;
+  border-collapse: collapse !important;
 }
 
 .timetable-table th,
 .timetable-table td {
-  padding: 6px !important;
+  padding: 4px !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  border: 1px solid #ddd !important;
 }
 
 /* Mobile Responsive Styles for Timetable Page */
