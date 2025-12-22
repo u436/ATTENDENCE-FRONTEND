@@ -324,7 +324,7 @@ function Timetable() {
         </button>
       </div>
       <Settings isOpen={showSettings} onClose={() => setShowSettings(false)} />
-      <div style={{ display: "flex", flexDirection: "column", gap: "3px", margin: "0", padding: "0", marginTop: "12px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px", margin: "0", padding: "0", marginTop: "12px", width: "100%", maxWidth: "100%" }}>
         <h2 style={{ margin: "0", padding: "0", lineHeight: "1.1", fontSize: "1.4rem" }}>Today's Classes</h2>
         
         {date && day && (
@@ -360,12 +360,12 @@ function Timetable() {
         )}
         
         {displayedTimetable.length > 0 && (
-          <table style={{ borderCollapse: "collapse", width: "100%", margin: "0", fontSize: "1.05rem", lineHeight: "1.6" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: "100%", margin: "0", fontSize: "1.05rem", lineHeight: "1.6" }}>
             <thead>
               <tr style={{ backgroundColor: "#f5f5f5" }}>
-                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Period</th>
+                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>S.No</th>
                 <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Time</th>
-                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "left", fontWeight: "600", fontSize: "1rem" }}>Subject</th>
+                <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Subject</th>
                 <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>Status</th>
               </tr>
             </thead>
@@ -374,7 +374,7 @@ function Timetable() {
                 <tr key={idx}>
                   <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>{cls.sno}</td>
                   <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>{cls.time || '-'}</td>
-                  <td style={{ padding: "7px 5px", border: "1px solid #ddd" }}>
+                  <td style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center" }}>
                     {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
                     <span
                       title={"Attendance: " + (subjectAttendance[cls.subject] ?? 0) + "%"}
