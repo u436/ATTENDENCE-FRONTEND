@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "checkJs": false
+  },
+  "include": [
+    "Frontend/**/*",
+    "backend/**/*"
+  ],
+  "exclude": [
+    "Backend/**/*",
+    "Backend/node_modules/**/*"
+  ]
+}
