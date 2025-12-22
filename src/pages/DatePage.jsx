@@ -69,7 +69,6 @@ function DatePage() {
         dateFormat="yyyy-MM-dd"
         placeholderText="Select a date"
         className="custom-datepicker"
-        readOnly
         inputMode="none"
         scrollableYearDropdown
         monthsShown={1} // single month

@@ -400,14 +400,13 @@ function Timetable() {
                   <td style={{ padding: "5px 2px", border: "1px solid #ddd", textAlign: "center" }}>
                     <button 
                       onClick={() => handleStatusClick(idx, "present")}
-                      disabled={!!holidayNote || isFutureDate}
                       style={{
                         padding: "6px 10px",
                         fontSize: "0.9rem",
                         backgroundColor: cls.status === 'present' ? '#4CAF50' : '',
                         color: cls.status === 'present' ? 'white' : '',
-                        opacity: (holidayNote || isFutureDate) ? 0.6 : 1,
-                        cursor: (holidayNote || isFutureDate) ? 'not-allowed' : 'pointer',
+                        opacity: 1,
+                        cursor: 'pointer',
                         border: "1px solid #ccc",
                         borderRadius: "2px"
                       }}
@@ -416,14 +415,13 @@ function Timetable() {
                     </button>
                     <button 
                       onClick={() => handleStatusClick(idx, "absent")}
-                      disabled={!!holidayNote || isFutureDate}
                       style={{
                         padding: "6px 10px",
                         fontSize: "0.9rem",
                         backgroundColor: cls.status === 'absent' ? '#f44336' : '',
                         color: cls.status === 'absent' ? 'white' : '',
-                        opacity: (holidayNote || isFutureDate) ? 0.6 : 1,
-                        cursor: (holidayNote || isFutureDate) ? 'not-allowed' : 'pointer',
+                        opacity: 1,
+                        cursor: 'pointer',
                         border: "1px solid #ccc",
                         borderRadius: "2px",
                         marginLeft: "3px"

@@ -1,5 +1,17 @@
 /* Reports Page Specific Styles */
 
+.reports-container {
+  background: linear-gradient(135deg, #f5f8ff 0%, #eef3ff 50%, #f9fcff 100%);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #dfe7fb;
+}
+
+.reports-buttons button {
+  background: linear-gradient(135deg, #6aa0ff 0%, #4f7dff 100%);
+  color: #fff;
+}
 
 .reports-input-grid {
   display: grid;
@@ -7,6 +19,224 @@
   gap: 10px;
   align-items: center;
   margin-bottom: 12px;
+}
+
+.reports-input-grid > div {
+  background: #ffffff;
+  border: 1px solid #e3e9f5;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.reports-input-grid input,
+.reports-input-grid select {
+  background: #f7faff;
+  border: 1.5px solid #cddaf7;
+  border-radius: 8px;
+  color: #1f2d3d;
+}
+
+.reports-input-grid label {
+  color: #455a7b;
+}
+
+.report-section {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.report-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-section table thead th {
+  background: #5c86ff;
+  color: #fff;
+  border: 1px solid #4b73d9;
+}
+
+.report-section tbody tr {
+  background: #ffffff !important;
+}
+
+.report-section tbody td {
+  background: #ffffff !important;
+  color: #333 !important;
+  border: 1px solid #e0e0e0;
+}
+
+/* Mobile Responsive Styles for Reports Page */
+@media (max-width: 768px) {
+  .reports-container {
+    max-width: 100%;
+    padding: 15px !important;
+  }
+
+  .reports-input-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .reports-input-grid > div {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .reports-input-grid input,
+  .reports-input-grid select {
+    width: 100%;
+    font-size: 14px !important;
+    padding: 6px !important;
+  }
+
+  .reports-input-grid label {
+    font-size: 11px !important;
+  }
+
+  /* Make report sections scrollable */
+  .report-section {
+    max-height: 200px !important;
+    overflow-y: auto;
+    padding: 10px !important;
+  }
+
+  /* Adjust table in reports for mobile */
+  .report-section table {
+    font-size: 12px;
+    width: 100% !important;
+    display: table !important;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+
+  .report-section {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .report-section th,
+  .report-section td {
+    padding: 6px !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    text-align: left;
+  }
+
+  .report-section th:last-child,
+  .report-section td:last-child {
+    text-align: center;
+  }
+
+  /* Make buttons stack on mobile */
+  .reports-buttons {
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
+
+  .reports-buttons button {
+    flex: 1;
+    min-width: 80px;
+    margin: 3px !important;
+  }
+
+  /* Holiday list mobile adjustments */
+  .holiday-list {
+    max-height: 180px !important;
+  }
+
+  .holiday-list li {
+    font-size: 13px !important;
+    padding: 6px 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .reports-input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-container h2 {
+    font-size: 1.3rem;
+  }
+
+  .reports-container h3 {
+    font-size: 1.1rem;
+  }
+
+  .reports-container p {
+    font-size: 13px;
+  }
+}
+
+.reports-container {
+  background: linear-gradient(135deg, #f5f8ff 0%, #eef3ff 50%, #f9fcff 100%);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #dfe7fb;
+}
+
+.reports-buttons button {
+  background: linear-gradient(135deg, #6aa0ff 0%, #4f7dff 100%);
+  color: #fff;
+}
+
+.reports-input-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reports-input-grid > div {
+  background: #ffffff;
+  border: 1px solid #e3e9f5;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.reports-input-grid input,
+.reports-input-grid select {
+  background: #f7faff;
+  border: 1.5px solid #cddaf7;
+  border-radius: 8px;
+  color: #1f2d3d;
+}
+
+.reports-input-grid label {
+  color: #455a7b;
+}
+
+.report-section {
+  background: #ffffff;
+  border: 1px solid #e3e9f5;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.report-section table thead th {
+  background: linear-gradient(135deg, #7ea8ff 0%, #5c86ff 100%);
+  color: #fff;
+  border: none;
+}
+
+.report-section tbody tr:nth-child(odd) {
+  background: #f8fbff;
+}
+
+.report-section tbody tr:nth-child(even) {
+  background: #f3f7ff;
+}
+
+.report-section tbody td {
+  border: 1px solid #e3e9f5;
 }
 
 /* Mobile Responsive Styles for Reports Page */
@@ -32,6 +262,10 @@
     padding: 6px !important;
   }
 
+  .reports-input-grid > div {
+    padding: 8px;
+  }
+
   .reports-input-grid label {
     font-size: 11px !important;
   }
@@ -40,6 +274,7 @@
   .report-section {
     max-height: 200px !important;
     overflow-y: auto;
+    padding: 10px !important;
   }
 
   /* Adjust table in reports for mobile */
