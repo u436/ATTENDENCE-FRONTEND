@@ -70,17 +70,17 @@ function Settings({ isOpen, onClose }) {
 						width: "100%",
 						padding: "15px",
 						marginBottom: "10px",
-						backgroundColor: "#007bff",
+						backgroundColor: "#2563eb",
 						color: "white",
 						border: "none",
 						borderRadius: "5px",
 						fontSize: "16px",
 						fontWeight: "600",
 						cursor: "pointer",
-						transition: "background-color 0.3s",
+						transition: "background-color 0.2s",
 					}}
-					onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
-					onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bff")}
+					onMouseEnter={(e) => (e.target.style.backgroundColor = "#1d4ed8")}
+					onMouseLeave={(e) => (e.target.style.backgroundColor = "#2563eb")}
 				>
 					📅 Change Date
 				</button>
@@ -91,7 +91,7 @@ function Settings({ isOpen, onClose }) {
 						width: "100%",
 						padding: "15px",
 						marginBottom: "10px",
-						backgroundColor: "#28a745",
+						backgroundColor: "#10b981",
 						color: "white",
 						border: "none",
 						borderRadius: "5px",
@@ -100,8 +100,8 @@ function Settings({ isOpen, onClose }) {
 						cursor: "pointer",
 						transition: "background-color 0.3s",
 					}}
-					onMouseEnter={(e) => (e.target.style.backgroundColor = "#218838")}
-					onMouseLeave={(e) => (e.target.style.backgroundColor = "#28a745")}
+					onMouseEnter={(e) => (e.target.style.backgroundColor = "#059669")}
+					onMouseLeave={(e) => (e.target.style.backgroundColor = "#10b981")}
 				>
 					⚙️ Change Timetable Mode
 				</button>
@@ -112,7 +112,7 @@ function Settings({ isOpen, onClose }) {
 						width: "100%",
 						padding: "15px",
 						marginBottom: "10px",
-						backgroundColor: "#ff9800",
+						backgroundColor: "#7c3aed",
 						color: "white",
 						border: "none",
 						borderRadius: "5px",
@@ -121,8 +121,8 @@ function Settings({ isOpen, onClose }) {
 						cursor: "pointer",
 						transition: "background-color 0.3s",
 					}}
-					onMouseEnter={(e) => (e.target.style.backgroundColor = "#e68900")}
-					onMouseLeave={(e) => (e.target.style.backgroundColor = "#ff9800")}
+					onMouseEnter={(e) => (e.target.style.backgroundColor = "#6d28d9")}
+					onMouseLeave={(e) => (e.target.style.backgroundColor = "#7c3aed")}
 				>
 					🔔 Notification Settings
 				</button>
@@ -174,7 +174,7 @@ function Settings({ isOpen, onClose }) {
 						display: "block",
 						width: "100%",
 						padding: "15px",
-						backgroundColor: "#6c757d",
+						backgroundColor: "#475569",
 						color: "white",
 						border: "none",
 						borderRadius: "5px",
@@ -183,8 +183,8 @@ function Settings({ isOpen, onClose }) {
 						cursor: "pointer",
 						transition: "background-color 0.3s",
 					}}
-					onMouseEnter={(e) => (e.target.style.backgroundColor = "#5a6268")}
-					onMouseLeave={(e) => (e.target.style.backgroundColor = "#6c757d")}
+					onMouseEnter={(e) => (e.target.style.backgroundColor = "#334155")}
+					onMouseLeave={(e) => (e.target.style.backgroundColor = "#475569")}
 				>
 					Close
 				</button>

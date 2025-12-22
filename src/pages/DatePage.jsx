@@ -60,7 +60,7 @@ function DatePage() {
 
   return (
     <div className="centered-card">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", width: "100%", maxWidth: "400px" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", width: "100%", maxWidth: "400px" }}>
         <h2 style={{ margin: 0, marginBottom: "8px" }}>Enter Date and Day</h2>
 
       <DatePicker

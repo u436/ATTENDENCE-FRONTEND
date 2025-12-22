@@ -175,15 +175,13 @@ function UploadPage() {
 			subjectsForDay.forEach((subject) => {
 				const count = parseInt(subjectDayConfig[subject]) || 0;
 				if (count > 0) {
-					for (let i = 0; i < count; i++) {
-						rows.push({
-							sno: sno++,
-							subject,
-							time: '',
-							status: '',
-							weight: 1,
-						});
-					}
+					rows.push({
+						sno: sno++,
+						subject,
+						time: '',
+						status: '',
+						weight: count, // treat count as weight for percentage calculations
+					});
 				}
 			});
 
@@ -727,55 +725,55 @@ function UploadPage() {
 					minWidth: "320px",
 					width: "95vw",
 					maxWidth: "520px",
+					maxHeight: "85vh",
 					color: "#333",
-					boxShadow: "0 10px 40px rgba(0,0,0,0.3)"
+					boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+					display: "flex",
+					flexDirection: "column",
+					overflow: "hidden"
 				}}>
-					<h3 style={{ marginTop: 0, marginBottom: "10px", color: "#1976d2", fontSize: "24px", fontWeight: "700" }}>
+					<h3 style={{ marginTop: 0, marginBottom: "8px", color: "#1976d2", fontSize: "20px", fontWeight: "700" }}>
 						📚 How many periods per subject?
 					</h3>
-					<p style={{ fontSize: "14px", color: "#666", marginBottom: "24px", lineHeight: "1.5" }}>
+					<p style={{ fontSize: "12px", color: "#666", marginBottom: "16px", lineHeight: "1.5" }}>
 						Enter the number of periods (classes) for each subject.
 					</p>
-					<div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "24px" }}>
+					<div style={{ display: "flex", flexDirection: "column", gap: "4px", marginBottom: "12px", maxHeight: "55vh", overflowY: "auto", paddingRight: "8px" }}>
 						{pendingSubjects.map((subject, idx) => (
 							<div 
 								key={subject} 
 								style={{ 
-									display: "flex", 
-									alignItems: "center", 
-									gap: "12px",
+									display: "flex",
+									alignItems: "center",
+									gap: "4px",
 									flexWrap: "wrap",
 									justifyContent: "space-between",
-										padding: "12px 14px",
-									backgroundColor: idx % 2 === 0 ? "#f5f5f5" : "#fff",
-									borderRadius: "10px",
-									border: "2px solid #e0e0e0",
-									transition: "all 0.2s ease"
-								}}
-								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor = "#e3f2fd";
-									e.currentTarget.style.borderColor = "#90caf9";
-								}}
-								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor = idx % 2 === 0 ? "#f5f5f5" : "#fff";
-									e.currentTarget.style.borderColor = "#e0e0e0";
+									padding: "4px 6px",
+									backgroundColor: "#f4e8d0",
+									borderRadius: "8px",
+									border: "1.5px solid #d4b896",
+									transition: "all 0.2s ease",
+									minHeight: "28px"
 								}}
 							>
 								<label style={{ 
-									minWidth: "140px",
-									flex: "1 1 160px",
-									fontWeight: 600, 
+									minWidth: "80px",
+									flex: "1 1 100px",
+									fontWeight: 600,
 									color: "#1976d2",
-									fontSize: "16px"
+									fontSize: "12px"
 								}}>
 									{subject}:
 								</label>
-																<input
+								<input
 									type="number"
 									min="1"
 									max="5"
-																	inputMode="numeric"
-																		value={subjectDayConfig[subject] ?? 1}
+									step="1"
+									value={subjectDayConfig[subject] ?? 1}
+									onKeyDown={(e) => {
+										e.preventDefault();
+									}}
 									onChange={(e) => {
 										const val = e.target.value === "" ? "" : parseInt(e.target.value);
 										if (val === "" || (val >= 1 && val <= 5)) {
@@ -786,17 +784,22 @@ function UploadPage() {
 										}
 									}}
 									style={{ 
-										width: "80px", 
-										padding: "10px 12px", 
+										width: "38px",
+										height: "24px",
+										padding: "2px 0",
 										textAlign: "center", 
-										fontSize: "18px",
+										fontSize: "12px",
 										fontWeight: "600",
 										border: "2px solid #1976d2",
-										borderRadius: "8px",
+										borderRadius: "6px",
 										backgroundColor: "#fff",
 										color: "#1976d2",
 										outline: "none",
-										transition: "all 0.2s ease"
+										transition: "all 0.2s ease",
+										appearance: "auto",
+										WebkitAppearance: "auto",
+										MozAppearance: "textfield",
+										cursor: "default"
 									}}
 									onFocus={(e) => {
 										e.target.style.borderColor = "#1565c0";
@@ -807,27 +810,7 @@ function UploadPage() {
 										e.target.style.boxShadow = "none";
 									}}
 								/>
-																	<div style={{ display: "flex", flexDirection: "row", gap: 6 }}>
-																		<button
-																			type="button"
-																			onClick={() => {
-																				const current = subjectDayConfig[subject] ?? 1;
-																				const next = Math.min(5, (current || 1) + 1);
-																				setSubjectDayConfig((prev) => ({ ...prev, [subject]: next }));
-																			}}
-																			style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #90caf9", background: "#e3f2fd", cursor: "pointer" }}
-																		>◀</button>
-																		<button
-																			type="button"
-																			onClick={() => {
-																				const current = subjectDayConfig[subject] ?? 1;
-																				const next = Math.max(1, (current || 1) - 1);
-																				setSubjectDayConfig((prev) => ({ ...prev, [subject]: next }));
-																			}}
-																			style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #ffcc80", background: "#fff3e0", cursor: "pointer" }}
-																		>▶</button>
-																	</div>
-								<span style={{ fontSize: "15px", color: "#757575", fontWeight: "500" }}>periods</span>
+								<span style={{ fontSize: "11px", color: "#757575", fontWeight: "500" }}>periods</span>
 							</div>
 						))}
 					</div>

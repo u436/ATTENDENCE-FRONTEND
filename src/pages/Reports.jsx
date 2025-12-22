@@ -11,6 +11,8 @@ function Reports() {
   const [monthInput, setMonthInput] = useState("");
   const [dayInput, setDayInput] = useState("");
   const [subjectInput, setSubjectInput] = useState("all");
+  const hasManualDate = yearInput.trim() || monthInput.trim() || dayInput.trim();
+  const isFullDateSearch = yearInput.trim() && monthInput.trim() && dayInput.trim();
   const normalizeDate = (y, m, d) => {
     if (!y || !m || !d) return "";
     const month = m.length === 1 ? `0${m}` : m;
@@ -21,8 +23,8 @@ function Reports() {
   const selectedDate = useMemo(() => {
     const manual = normalizeDate(yearInput.trim(), monthInput.trim(), dayInput.trim());
     if (manual) return manual;
-    return date || "";
-  }, [yearInput, monthInput, dayInput, date]);
+    return hasManualDate ? "" : (date || "");
+  }, [yearInput, monthInput, dayInput, date, hasManualDate]);
 
   const selectedDayName = useMemo(() => {
     if (!selectedDate) return "";
@@ -34,6 +36,16 @@ function Reports() {
     if (!selectedDate || !selectedDayName) return "";
     return `${selectedDate}-${selectedDayName}`;
   }, [selectedDate, selectedDayName]);
+
+  const holidayNoteForSelectedDate = useMemo(() => {
+    if (!hasManualDate) return "";
+    if (!selectedDateKeyWithDay || !selectedDayName) return "";
+    // If there is an override timetable for this date, do not treat as holiday
+    if (dateTimetableOverride?.[selectedDateKeyWithDay]) return "";
+    if (holidayByDate[selectedDateKeyWithDay]) return holidayByDate[selectedDateKeyWithDay];
+    if (holidayByDay[selectedDayName]) return holidayByDay[selectedDayName];
+    return "";
+  }, [hasManualDate, selectedDateKeyWithDay, selectedDayName, holidayByDate, holidayByDay, dateTimetableOverride]);
 
   const scheduleForSelectedDate = useMemo(() => {
     if (!selectedDayName) return [];
@@ -88,6 +100,8 @@ function Reports() {
   }, [scheduleForSelectedDate]);
 
   const weightForRow = (row) => {
+    const explicit = Number(row?.weight);
+    if (!Number.isNaN(explicit) && explicit > 0) return explicit;
     const dur = parseTime(row.time);
     if (!dur || !baselineMinutes) return 1;
     const w = Math.round(dur / baselineMinutes);
@@ -102,7 +116,8 @@ function Reports() {
     (scheduleForSelectedDate || []).forEach((row, idx) => {
       if (!row || !row.subject) return;
       const entry = detail[idx];
-      const weight = entry?.weight ?? weightForRow(row);
+      const weightRaw = entry?.weight ?? weightForRow(row);
+      const weight = Number.isFinite(Number(weightRaw)) && Number(weightRaw) > 0 ? Number(weightRaw) : weightForRow(row);
       const status = entry?.status ?? row.status;
       const subj = row.subject;
       totals[subj] = (totals[subj] || 0) + weight;
@@ -139,7 +154,8 @@ function Reports() {
       if (holidayByDate[dateKeyWithDay] && !dateTimetableOverride[dateKeyWithDay]) return;
       Object.values(detail || {}).forEach(({ subject, status, weight }) => {
         if (!subject) return;
-        const w = typeof weight === "number" && weight > 0 ? weight : 1;
+        const wNum = Number(weight);
+        const w = Number.isFinite(wNum) && wNum > 0 ? wNum : 1;
         totals[subject] = (totals[subject] || 0) + w;
         if (status === "present") {
           presents[subject] = (presents[subject] || 0) + w;
@@ -153,20 +169,42 @@ function Reports() {
       return { month: monthKey, subject: subj, present: p, total: t, pct: t > 0 ? Math.round((p / t) * 100) : 0 };
     });
   }, [attendanceDetailByDate, holidayByDate, dateTimetableOverride, selectedDate, yearInput, monthInput, subjectInput, allSubjects]);
-
   const dailyAverage = useMemo(() => {
     if (dailySubjectStats.length === 0) return 0;
-    const sum = dailySubjectStats.reduce((acc, r) => acc + r.pct, 0);
-    return Math.round(sum / dailySubjectStats.length);
+    // Formula: Total Presents / Total Classes × 100
+    const presentSum = dailySubjectStats.reduce((acc, r) => acc + (r.present || 0), 0);
+    const totalSum = dailySubjectStats.reduce((acc, r) => acc + (r.total || 0), 0);
+    return totalSum > 0 ? Math.round((presentSum / totalSum) * 100) : 0;
   }, [dailySubjectStats]);
 
   const monthlyAverage = useMemo(() => {
     if (monthlySubjectStats.length === 0) return 0;
-    const sum = monthlySubjectStats.reduce((acc, r) => acc + r.pct, 0);
-    return Math.round(sum / monthlySubjectStats.length);
+    // Only include subjects that have actual classes recorded
+    const subjectsWithClasses = monthlySubjectStats.filter(stat => (stat.total || 0) > 0);
+    if (subjectsWithClasses.length === 0) return 0;
+    // Weighted average formula: sum(present × count) / sum(total × count) × 100
+    // Note: stat.present and stat.total already include weights/counts from attendanceDetailByDate
+    const totalPresents = subjectsWithClasses.reduce((sum, stat) => sum + (stat.present || 0), 0);
+    const totalClasses = subjectsWithClasses.reduce((sum, stat) => sum + (stat.total || 0), 0);
+    return totalClasses > 0 ? Math.round((totalPresents / totalClasses) * 100) : 0;
   }, [monthlySubjectStats]);
 
-  const holidayDates = useMemo(() => Object.keys(holidayByDate || {}).sort(), [holidayByDate]);
+  const holidayDates = useMemo(() => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    
+    return Object.keys(holidayByDate || {})
+      .filter(dateKey => {
+        const parts = dateKey.split('-');
+        if (parts.length >= 3) {
+          const dateObj = new Date(`${parts[0]}-${parts[1]}-${parts[2]}`);
+          return dateObj.getMonth() === currentMonth && dateObj.getFullYear() === currentYear;
+        }
+        return false;
+      })
+      .sort();
+  }, [holidayByDate]);
 
   return (
     <div className="centered-card reports-container">
@@ -176,41 +214,41 @@ function Reports() {
       </div>
       <h2 style={{ margin: "0 0 6px 0" }}>Reports</h2>
       <p style={{ color: "#607d8b", margin: "0 0 8px 0" }}>Pick a day/month and (optionally) a subject filter.</p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, alignItems: "center", marginBottom: 8 }} className="reports-input-grid">
-        <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className="reports-input-grid">
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <label style={{ fontSize: 12, color: "#5c6f82", fontWeight: 600 }}>Year (YYYY)</label>
           <input 
             value={yearInput} 
             onChange={(e) => setYearInput(e.target.value)} 
             aria-label="Year"
-            style={{ padding: "8px", border: "1.5px solid #8fa5b8", borderRadius: "6px", backgroundColor: "#f0f4f8" }}
+            style={{ padding: "8px", border: "1.5px solid #8fa5b8", borderRadius: "6px", backgroundColor: "#f0f4f8", width: "100%", boxSizing: "border-box" }}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <label style={{ fontSize: 12, color: "#4a7c6b", fontWeight: 600 }}>Month (MM or name)</label>
           <input 
             value={monthInput} 
             onChange={(e) => setMonthInput(e.target.value)} 
             aria-label="Month"
-            style={{ padding: "8px", border: "1.5px solid #7eb3a1", borderRadius: "6px", backgroundColor: "#f0f8f6" }}
+            style={{ padding: "8px", border: "1.5px solid #7eb3a1", borderRadius: "6px", backgroundColor: "#f0f8f6", width: "100%", boxSizing: "border-box" }}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <label style={{ fontSize: 12, color: "#8b6f47", fontWeight: 600 }}>Day (1-31)</label>
           <input 
             value={dayInput} 
             onChange={(e) => setDayInput(e.target.value)} 
             aria-label="Day"
-            style={{ padding: "8px", border: "1.5px solid #c9a876", borderRadius: "6px", backgroundColor: "#faf5f0" }}
+            style={{ padding: "8px", border: "1.5px solid #c9a876", borderRadius: "6px", backgroundColor: "#faf5f0", width: "100%", boxSizing: "border-box" }}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <label style={{ fontSize: 12, color: "#7a5c8a", fontWeight: 600 }}>Subject</label>
           <select 
             value={subjectInput} 
             onChange={(e) => setSubjectInput(e.target.value)} 
             aria-label="Subject"
-            style={{ padding: "8px", border: "1.5px solid #b895c7", borderRadius: "6px", backgroundColor: "#faf6fd" }}
+            style={{ padding: "8px", border: "1.5px solid #b895c7", borderRadius: "6px", backgroundColor: "#faf6fd", width: "100%", boxSizing: "border-box" }}
           >
             <option value="all">All subjects</option>
             {allSubjects.map((s) => (
@@ -220,6 +258,46 @@ function Reports() {
         </div>
       </div>
 
+      <h3 style={{ margin: "10px 0 6px 0" }}>Selected Day Details</h3>
+      <div className="report-section" style={{ padding: 10, marginBottom: 10 }}>
+        {!selectedDate ? (
+          <p style={{ margin: 0 }}>Pick a date to view its timetable.</p>
+        ) : holidayNoteForSelectedDate ? (
+          <p style={{ margin: 0, color: "#ff9800", fontWeight: 700 }}>🌴 Holiday: {holidayNoteForSelectedDate}</p>
+        ) : scheduleForSelectedDate.length === 0 && isFullDateSearch ? (
+          <p style={{ margin: 0, color: "#666", fontStyle: "italic" }}>No timetable found for this date.</p>
+        ) : scheduleForSelectedDate.length === 0 ? (
+          null
+        ) : (
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0" }}>S.No</th>
+                <th style={{ textAlign: "left", padding: 6, border: "1px solid #e0e0e0" }}>Subject</th>
+                <th style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0" }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scheduleForSelectedDate.map((row, idx) => {
+                const detail = attendanceDetailByDate[selectedDate]?.[idx];
+                const status = detail?.status || row.status || "—";
+                return (
+                  <tr key={`sel-${idx}`}>
+                    <td style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0" }}>{row.sno || idx + 1}</td>
+                    <td style={{ textAlign: "left", padding: 6, border: "1px solid #e0e0e0" }}>{row.subject || `Period ${idx + 1}`}</td>
+                    <td style={{ textAlign: "center", padding: 6, border: "1px solid #e0e0e0", color: status === "present" ? "#2e7d32" : status === "absent" ? "#c62828" : "#666" }}>
+                      {status === "present" ? "Present" : status === "absent" ? "Absent" : "Not marked"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {!isFullDateSearch && (
+        <>
       <h3 style={{ margin: "8px 0 4px 0" }}>Today - Attendance by Subject</h3>
       <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {dailySubjectStats.length === 0 ? (
@@ -243,7 +321,11 @@ function Reports() {
           </table>
         )}
       </div>
+        </>
+      )}
 
+      {!isFullDateSearch && (
+        <>
       <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Attendance by Subject</h3>
       <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
@@ -267,7 +349,11 @@ function Reports() {
           </table>
         )}
       </div>
+        </>
+      )}
 
+      {!isFullDateSearch && (
+        <>
       <h3 style={{ margin: "8px 0 4px 0" }}>This Month - Average by Subject</h3>
       <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", padding: 6, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
@@ -295,12 +381,16 @@ function Reports() {
           </table>
         )}
       </div>
+        </>
+      )}
 
+      {!isFullDateSearch && (
+        <>
       {/* Holiday List */}
       <h3 style={{ margin: "8px 0 4px 0" }}>🌴 Holidays</h3>
-      <div className="holiday-list" style={{ maxHeight: 240, overflowY: "auto", padding: 8, backgroundColor: "#fff7e6" }}>
+      <div style={{ maxHeight: 240, overflowY: "auto", padding: 8, backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "8px" }}>
         {holidayDates.length === 0 ? (
-          <p style={{ color: "#c26600" }}>No holidays marked.</p>
+          <p style={{ color: "#666", textAlign: "center" }}>No holidays this month.</p>
         ) : (
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {holidayDates.map((dateKey) => {
@@ -312,17 +402,19 @@ function Reports() {
                 const d = parts[2];
                 const dateObj = new Date(`${y}-${m}-${d}`);
                 const dayName = dateObj.toLocaleDateString("en-US", { weekday: "long" });
-                display = `${m}/${d}/${y} (${dayName})`;
+                display = `${m}/${d}/${y} - ${dayName}`;
               }
               return (
-                <li key={dateKey} style={{ padding: "8px 0", color: "#c26600", fontWeight: 600, borderBottom: "1px solid #ffcc99" }}>
-                  📅 {display}
+                <li key={dateKey} style={{ padding: "8px 12px", color: "#333", fontWeight: 500, borderBottom: "1px solid #f0f0f0" }}>
+                  {display}
                 </li>
               );
             })}
           </ul>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }
