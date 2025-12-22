@@ -20,7 +20,7 @@ html, body {
 /* Base heading color */
 h1, h2 { color: #333; margin-bottom: 20px; }
 
-/* Full-screen transparent containers centered */
+/* Full-screen transparent containers centered - DESKTOP VERSION */
 .centered-card,
 .timetable-card {
   width: 100vw;
@@ -42,7 +42,23 @@ h1, h2 { color: #333; margin-bottom: 20px; }
 .centered-card > *,
 .timetable-card > * { width: min(95vw, 900px); margin: 0 auto; }
 
+/* MOBILE / WEBVIEW FIX - Override desktop grid with flexbox for proper centering */
 @media (max-width: 800px) {
+  html, body {
+    height: auto;
+    min-height: 100%;
+  }
+  
+  #root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
   .centered-card,
   .timetable-card {
     width: 100vw;
@@ -50,6 +66,13 @@ h1, h2 { color: #333; margin-bottom: 20px; }
     padding: 8px;
     overflow-x: hidden;
     margin: 0;
+    /* Override grid with flex for mobile/WebView */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    place-items: unset;
   }
   
   .centered-card > *,

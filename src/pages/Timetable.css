@@ -34,12 +34,13 @@
 }
 
 .timetable-card {
-  display: block !important;
+  display: flex !important;
   flex-direction: column;
   gap: 0 !important;
   width: 100vw !important;
   max-width: 100vw !important;
   padding: 0 !important;
+  justify-content: flex-start !important;
 }
 
 .timetable-card > * {
