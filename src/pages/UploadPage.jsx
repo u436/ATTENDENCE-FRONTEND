@@ -807,7 +807,7 @@ function UploadPage() {
 										e.target.style.boxShadow = "none";
 									}}
 								/>
-																	<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+																	<div style={{ display: "flex", flexDirection: "row", gap: 6 }}>
 																		<button
 																			type="button"
 																			onClick={() => {
@@ -816,7 +816,7 @@ function UploadPage() {
 																				setSubjectDayConfig((prev) => ({ ...prev, [subject]: next }));
 																			}}
 																			style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #90caf9", background: "#e3f2fd", cursor: "pointer" }}
-																		>▲</button>
+																		>◀</button>
 																		<button
 																			type="button"
 																			onClick={() => {
@@ -825,7 +825,7 @@ function UploadPage() {
 																				setSubjectDayConfig((prev) => ({ ...prev, [subject]: next }));
 																			}}
 																			style={{ padding: "6px 10px", borderRadius: 6, border: "1px solid #ffcc80", background: "#fff3e0", cursor: "pointer" }}
-																		>▼</button>
+																		>▶</button>
 																	</div>
 								<span style={{ fontSize: "15px", color: "#757575", fontWeight: "500" }}>periods</span>
 							</div>

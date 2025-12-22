@@ -341,7 +341,7 @@ function Timetable() {
           </div>
         )}
         
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
           {timetable.length > 0 && !holidayNote && !isFutureDate && (
             <button 
               onClick={handleMarkAsHoliday}
@@ -353,7 +353,9 @@ function Timetable() {
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontWeight: "600",
-                fontSize: "0.95rem"
+                fontSize: "0.95rem",
+                maxWidth: "100%",
+                width: "100%"
               }}
             >
               🌴 Mark This Day as Holiday
@@ -361,7 +363,8 @@ function Timetable() {
           )}
         
           {displayedTimetable.length > 0 && (
-            <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: "100%", margin: "0", fontSize: "1.05rem", lineHeight: "1.6" }}>
+            <div style={{ width: "100%", maxWidth: "100%", overflowX: "auto", boxSizing: "border-box" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%", minWidth: "100%", margin: "0", fontSize: "1.05rem", lineHeight: "1.6", tableLayout: "auto" }}>
               <thead>
                 <tr style={{ backgroundColor: "#f5f5f5" }}>
                   <th style={{ padding: "7px 5px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "1rem" }}>S.No</th>
@@ -435,6 +438,7 @@ function Timetable() {
               ))}
             </tbody>
           </table>
+            </div>
         )}
         </div>
       </div>
