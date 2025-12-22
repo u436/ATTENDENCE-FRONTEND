@@ -48,11 +48,18 @@
   /* Adjust table in reports for mobile */
   .report-section table {
     font-size: 12px;
+    width: 100%;
+    min-width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
   }
 
   .report-section th,
   .report-section td {
     padding: 6px !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
   /* Make buttons stack on mobile */

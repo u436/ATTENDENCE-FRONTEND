@@ -221,26 +221,22 @@ function Reports() {
       </div>
 
       <h3 style={{ marginTop: 0, marginBottom: 0 }}>Today - Attendance by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8 }}>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
-          <table style={{ width: "100%" }}>
+          <table style={{ width: "100%", minWidth: "250px" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
-                <th>Present (weighted)</th>
-                <th>Total (weighted)</th>
-                <th>Percentage</th>
+                <th style={{ textAlign: "center" }}>Attendance</th>
               </tr>
             </thead>
             <tbody>
               {dailySubjectStats.map((row, idx) => (
                 <tr key={`${row.subject}-${idx}`}>
                   <td style={{ textAlign: "left" }}>{row.subject}</td>
-                  <td>{row.present}</td>
-                  <td>{row.total}</td>
-                  <td style={{ color: "#ff9800", fontWeight: 700 }}>{row.pct}%</td>
+                  <td style={{ color: "#ff9800", fontWeight: 700, textAlign: "center" }}>{row.pct}%</td>
                 </tr>
               ))}
             </tbody>
@@ -249,27 +245,27 @@ function Reports() {
       </div>
 
       <h3 style={{ marginTop: 0, marginBottom: 0 }}>Today - Average by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8 }}>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 240, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
         {dailySubjectStats.length === 0 ? (
           <p>No data for this date.</p>
         ) : (
-          <table style={{ width: "100%" }}>
+          <table style={{ width: "100%", minWidth: "250px" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
-                <th>Average %</th>
+                <th style={{ textAlign: "center" }}>Average</th>
               </tr>
             </thead>
             <tbody>
               {dailySubjectStats.map((row, idx) => (
                 <tr key={`avg-day-${row.subject}-${idx}`}>
                   <td style={{ textAlign: "left" }}>{row.subject}</td>
-                  <td style={{ color: "#ff9800", fontWeight: 700 }}>{row.pct}%</td>
+                  <td style={{ color: "#ff9800", fontWeight: 700, textAlign: "center" }}>{row.pct}%</td>
                 </tr>
               ))}
               <tr style={{ fontWeight: 700, borderTop: "2px solid #ddd", background: "#fafafa" }}>
                 <td style={{ textAlign: "left" }}>Overall Average</td>
-                <td style={{ color: "#ff9800", fontWeight: 700 }}>{dailyAverage}%</td>
+                <td style={{ color: "#ff9800", fontWeight: 700, textAlign: "center" }}>{dailyAverage}%</td>
               </tr>
             </tbody>
           </table>
@@ -277,26 +273,22 @@ function Reports() {
       </div>
 
       <h3 style={{ marginTop: 0, marginBottom: 0 }}>This Month - Attendance by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8 }}>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
-          <table style={{ width: "100%" }}>
+          <table style={{ width: "100%", minWidth: "250px" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
-                <th>Present (weighted)</th>
-                <th>Total (weighted)</th>
-                <th>Percentage</th>
+                <th style={{ textAlign: "center" }}>Attendance</th>
               </tr>
             </thead>
             <tbody>
               {monthlySubjectStats.map((row, idx) => (
                 <tr key={`${row.subject}-${idx}`}>
                   <td style={{ textAlign: "left" }}>{row.subject}</td>
-                  <td>{row.present}</td>
-                  <td>{row.total}</td>
-                  <td style={{ color: "#2e7d32", fontWeight: 700 }}>{row.pct}%</td>
+                  <td style={{ color: "#2e7d32", fontWeight: 700, textAlign: "center" }}>{row.pct}%</td>
                 </tr>
               ))}
             </tbody>
@@ -305,27 +297,27 @@ function Reports() {
       </div>
 
       <h3 style={{ marginTop: 0, marginBottom: 0 }}>This Month - Average by Subject</h3>
-      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8 }}>
+      <div className="report-section" style={{ marginTop: 0, maxHeight: 260, overflowY: "auto", border: "1px solid #eee", borderRadius: 8, padding: 8, overflowX: "hidden" }}>
         {monthlySubjectStats.length === 0 ? (
           <p>No data for this month.</p>
         ) : (
-          <table style={{ width: "100%" }}>
+          <table style={{ width: "100%", minWidth: "250px" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Subject</th>
-                <th>Average %</th>
+                <th style={{ textAlign: "center" }}>Average</th>
               </tr>
             </thead>
             <tbody>
               {monthlySubjectStats.map((row, idx) => (
                 <tr key={`avg-month-${row.subject}-${idx}`}>
                   <td style={{ textAlign: "left" }}>{row.subject}</td>
-                  <td style={{ color: "#2e7d32", fontWeight: 700 }}>{row.pct}%</td>
+                  <td style={{ color: "#2e7d32", fontWeight: 700, textAlign: "center" }}>{row.pct}%</td>
                 </tr>
               ))}
               <tr style={{ fontWeight: 700, borderTop: "2px solid #ddd", background: "#fafafa" }}>
                 <td style={{ textAlign: "left" }}>Overall Average</td>
-                <td style={{ color: "#2e7d32", fontWeight: 700 }}>{monthlyAverage}%</td>
+                <td style={{ color: "#2e7d32", fontWeight: 700, textAlign: "center" }}>{monthlyAverage}%</td>
               </tr>
             </tbody>
           </table>

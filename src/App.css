@@ -5,7 +5,8 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 20px 0;
 }
 
 .centered-card {
@@ -114,6 +115,13 @@ sub {
 /* Disable clear button and other unnecessary UI */
 .react-datepicker__close-icon {
   display: none;
+}
+
+/* Desktop Centered Layout */
+@media (min-width: 769px) {
+  body {
+    align-items: center;
+  }
 }
 
 /* Mobile Responsive Styles */
