@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
-import { getNotificationTime, setNotificationTime, requestNotificationPermission, scheduleNotification, subscribeToPush, updatePushTime } from "../utils/notifications";
+import { getNotificationTime, setNotificationTime, requestNotificationPermission, scheduleNotification, subscribeToPush, updatePushTime, testPushNotification } from "../utils/notifications";
 
 function Settings({ isOpen, onClose }) {
 	const navigate = useNavigate();
@@ -278,6 +278,30 @@ function Settings({ isOpen, onClose }) {
 									}}
 								>
 									✓ Set
+								</button>
+							</div>
+							
+							{/* Test Notification Button */}
+							<div style={{ marginTop: "12px", textAlign: "center" }}>
+								<button
+									onClick={async () => {
+										const success = await testPushNotification();
+										if (!success) {
+											alert("Set a time first, then try again!");
+										}
+									}}
+									style={{
+										padding: "8px 16px",
+										backgroundColor: "#6366f1",
+										color: "white",
+										border: "none",
+										borderRadius: "6px",
+										fontSize: "13px",
+										fontWeight: "500",
+										cursor: "pointer",
+									}}
+								>
+									🔔 Test Notification Now
 								</button>
 							</div>
 						</div>
