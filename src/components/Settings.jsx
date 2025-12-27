@@ -46,11 +46,15 @@ function Settings({ isOpen, onClose }) {
 		onClose();
 	};
 
+	const [savingStatus, setSavingStatus] = useState("");
+
 	const handleSaveNotificationTime = async () => {
 		let hour24 = selectedHour;
 		if (selectedPeriod === 'PM' && selectedHour !== 12) hour24 += 12;
 		if (selectedPeriod === 'AM' && selectedHour === 12) hour24 = 0;
 		const timeString = `${hour24.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}`;
+		
+		setSavingStatus("Saving...");
 		
 		// Automatically request permission (browser will show prompt only if needed)
 		const granted = await requestNotificationPermission();
@@ -58,13 +62,25 @@ function Settings({ isOpen, onClose }) {
 			setNotificationTime(timeString);
 			scheduleNotification(timeString);
 			// Subscribe/update on backend for push notifications (works even when app closed)
-			await updatePushTime(timeString);
-			setShowNotificationSettings(false);
+			const success = await updatePushTime(timeString);
+			if (success) {
+				setSavingStatus("✅ Saved! Notification set for " + selectedHour + ":" + selectedMinute.toString().padStart(2, '0') + " " + selectedPeriod);
+			} else {
+				// Try subscribing fresh
+				const subSuccess = await subscribeToPush(timeString);
+				if (subSuccess) {
+					setSavingStatus("✅ Saved! Notification set for " + selectedHour + ":" + selectedMinute.toString().padStart(2, '0') + " " + selectedPeriod);
+				} else {
+					setSavingStatus("❌ Failed to save. Check internet connection.");
+				}
+			}
 		} else {
-			// Even if denied, still save locally
+			setSavingStatus("❌ Please allow notifications when browser asks!");
 			setNotificationTime(timeString);
-			setShowNotificationSettings(false);
 		}
+		
+		// Clear status after 3 seconds
+		setTimeout(() => setSavingStatus(""), 3000);
 	};
 
 	if (!isOpen) return null;
@@ -281,13 +297,31 @@ function Settings({ isOpen, onClose }) {
 								</button>
 							</div>
 							
+							{/* Status Message */}
+							{savingStatus && (
+								<div style={{
+									marginTop: "10px",
+									padding: "8px",
+									backgroundColor: savingStatus.includes("✅") ? "#d1fae5" : savingStatus.includes("❌") ? "#fee2e2" : "#e0f2fe",
+									borderRadius: "6px",
+									fontSize: "13px",
+									fontWeight: "500",
+									textAlign: "center",
+									color: savingStatus.includes("✅") ? "#065f46" : savingStatus.includes("❌") ? "#b91c1c" : "#1e40af"
+								}}>
+									{savingStatus}
+								</div>
+							)}
+							
 							{/* Test Notification Button */}
 							<div style={{ marginTop: "12px", textAlign: "center" }}>
 								<button
 									onClick={async () => {
 										const success = await testPushNotification();
-										if (!success) {
-											alert("Set a time first, then try again!");
+										if (success) {
+											alert("✅ Test notification sent! Check your phone.");
+										} else {
+											alert("❌ Failed! Click 'Set' first to save your notification.");
 										}
 									}}
 									style={{
