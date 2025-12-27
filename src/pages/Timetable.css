@@ -202,18 +202,21 @@
   /* Status column - keep buttons horizontal and compact */
   .timetable-table td:nth-child(4) > div {
     display: flex !important;
-    flex-direction: row !important;
-    gap: 3px !important;
+    flex-direction: column !important;
+    gap: 4px !important;
     justify-content: center !important;
-    align-items: center !important;
+    align-items: stretch !important;
+    padding: 4px !important;
   }
 
   .timetable-table td:nth-child(4) button {
-    padding: 5px 4px !important;
-    font-size: 0.7rem !important;
-    flex: 1 !important;
-    min-width: 0 !important;
+    padding: 8px 6px !important;
+    font-size: 0.75rem !important;
+    width: 100% !important;
+    min-width: 60px !important;
     white-space: nowrap !important;
+    border-radius: 6px !important;
+    margin: 0 !important;
   }
 
   /* Attendance percentage circle */

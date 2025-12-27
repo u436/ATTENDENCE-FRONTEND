@@ -5,7 +5,7 @@ import UploadPage from "./pages/UploadPage";
 import Landing from "./pages/Landing";
 import Timetable from "./pages/Timetable";
 import Reports from "./pages/Reports";
-import { requestNotificationPermission, scheduleNotification, isNotificationEnabled, getNotificationTime, registerServiceWorker } from "./utils/notifications";
+import { requestNotificationPermission, scheduleNotification, isNotificationEnabled, getNotificationTime, registerServiceWorker, subscribeToPush } from "./utils/notifications";
 
 function App() {
   useEffect(() => {
@@ -14,23 +14,37 @@ function App() {
     // Register service worker for better mobile notification support
     registerServiceWorker();
     
-    // Initialize notifications if previously enabled
+    // Auto-request notification permission on first visit (like Meesho)
     const initNotifications = async () => {
-      // Check if user previously enabled notifications
-      if (isNotificationEnabled()) {
-        console.log('ℹ️ Notifications were previously enabled');
-        const savedTime = getNotificationTime();
-        console.log('⏰ Saved notification time:', savedTime);
-        
-        // Check if permission is still granted
-        if ('Notification' in window && Notification.permission === 'granted') {
-          console.log('✅ Permission already granted, starting scheduler');
-          scheduleNotification(savedTime);
+      // Check if we already have permission or it was denied
+      if ('Notification' in window) {
+        if (Notification.permission === 'default') {
+          // First time - automatically ask for permission
+          console.log('🔔 First visit - requesting notification permission automatically...');
+          const granted = await requestNotificationPermission();
+          if (granted) {
+            console.log('✅ Permission granted! Subscribing to push notifications...');
+            const defaultTime = getNotificationTime() || "09:00";
+            await subscribeToPush(defaultTime);
+            scheduleNotification(defaultTime);
+          }
+        } else if (Notification.permission === 'granted') {
+          // Permission already granted - ensure notifications are running
+          console.log('✅ Permission already granted');
+          if (isNotificationEnabled()) {
+            const savedTime = getNotificationTime();
+            console.log('⏰ Saved notification time:', savedTime);
+            scheduleNotification(savedTime);
+          } else {
+            // Permission granted but notifications not set up - set them up
+            console.log('🔔 Setting up notifications with default time...');
+            const defaultTime = getNotificationTime() || "09:00";
+            await subscribeToPush(defaultTime);
+            scheduleNotification(defaultTime);
+          }
         } else {
-          console.log('ℹ️ Permission not granted, will request when user enables notifications');
+          console.log('❌ Notifications were denied by user');
         }
-      } else {
-        console.log('ℹ️ Notifications not enabled yet');
       }
     };
     

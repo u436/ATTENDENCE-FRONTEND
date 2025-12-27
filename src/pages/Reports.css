@@ -168,32 +168,38 @@
 }
 
 .attendance-box {
-  border: 1px solid #ccc;
+  border: 2px solid #2196F3;
   border-radius: 8px;
   padding: 10px;
   background-color: #fff;
   overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
 }
 
 .attendance-box h4 {
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .attendance-box table {
   width: 100%;
+  min-width: 100%;
   border-collapse: collapse;
+  border: 2px solid #2196F3;
 }
 
 .attendance-box table th {
   background-color: #2196F3;
   color: white;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
+  padding: 10px 14px;
+  border: 1px solid #1976D2;
+  text-align: center;
 }
 
 .attendance-box table td {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
   text-align: center;
 }
 
@@ -402,12 +408,19 @@
   .attendance-box {
     padding: 8px;
     overflow-x: auto;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .attendance-box table {
+    width: 100% !important;
+    min-width: 280px !important;
   }
 
   .attendance-box table th,
   .attendance-box table td {
-    padding: 6px 8px;
-    font-size: 13px;
+    padding: 8px 10px;
+    font-size: 14px;
   }
 
   .holidays-section h2,
