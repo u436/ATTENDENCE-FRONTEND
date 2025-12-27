@@ -113,6 +113,20 @@
   max-height: 60vh;
   box-sizing: border-box !important;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.timetable-card > div > div:has(> table)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.timetable-card > div > div:has(> table)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.timetable-card > div > div:has(> table)::-webkit-scrollbar-thumb {
+  background: #90CAF9;
+  border-radius: 3px;
 }
 
 .timetable-table {

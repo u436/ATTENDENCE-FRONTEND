@@ -182,6 +182,20 @@
   display: block;
   max-height: 400px;
   overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.attendance-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.attendance-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.attendance-box::-webkit-scrollbar-thumb {
+  background: #90CAF9;
+  border-radius: 3px;
 }
 
 .attendance-box h4 {
@@ -247,6 +261,20 @@
   background-color: #FFF3E0;
   max-height: 300px;
   overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.holidays-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.holidays-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.holidays-box::-webkit-scrollbar-thumb {
+  background: #FFB74D;
+  border-radius: 3px;
 }
 
 .holidays-box .no-holidays {
@@ -260,8 +288,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 250px;
-  overflow-y: auto;
 }
 
 .holidays-list li {

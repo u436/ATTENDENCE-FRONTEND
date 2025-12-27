@@ -145,9 +145,28 @@ body.welcome-page, body.other-unwanted-pages {
 .subjects-list-container {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: 50vh;
   padding: 8px 0;
   margin-bottom: 10px;
+  scrollbar-width: thin;
+}
+
+.subjects-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.subjects-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.subjects-list-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.subjects-list-container::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }
 
 .add-subject-section input {
