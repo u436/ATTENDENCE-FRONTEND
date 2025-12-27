@@ -30,48 +30,7 @@ export const AppProvider = ({ children }) => {
   // setupCompleted: tracks if user has completed the initial setup (uploaded timetable)
   const [setupCompleted, setSetupCompleted] = useState(false);
 
-  // Hydrate from localStorage on load
-  useEffect(() => {
-    try {
-      // Check version - if mismatch, clear old data
-      const savedVersion = localStorage.getItem(VERSION_KEY);
-      if (savedVersion !== CURRENT_VERSION) {
-        console.log('Version mismatch - clearing old data');
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
-        return; // Skip loading old data
-      }
-
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        setDate(parsed.date || "");
-        setDay(parsed.day || "");
-        setTimetablesByDay(parsed.timetablesByDay || {});
-        setHolidayMessage(parsed.holidayMessage || "");
-        setHolidayByDay(parsed.holidayByDay || {});
-        setHolidayByDate(parsed.holidayByDate || {});
-        setAttendanceHistory(parsed.attendanceHistory || {});
-        setAttendanceDetailByDate(parsed.attendanceDetailByDate || {});
-        setDateTimetableOverride(parsed.dateTimetableOverride || {});
-        setSetupCompleted(parsed.setupCompleted || false);
-        if (parsed.date && parsed.day && parsed.timetablesByDay) {
-          const key = parsed.day; // Use weekday as key
-          if (parsed.timetablesByDay[key]) {
-            setTimetable(parsed.timetablesByDay[key]);
-          }
-        }
-      }
-    } catch (err) {
-      console.error("Failed to hydrate timetable state", err);
-    }
-  }, []);
-
-  // Persist to localStorage when date/day or timetables change
-  useEffect(() => {
-    const payload = { date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride, setupCompleted };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  }, [date, day, timetablesByDay, holidayMessage, holidayByDay, holidayByDate, attendanceHistory, attendanceDetailByDate, dateTimetableOverride, setupCompleted]);
+  // Removed localStorage hydration and persistence for fresh start on each device
 
   // Auto-select timetable for the current date/day if available
   useEffect(() => {
