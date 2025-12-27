@@ -55,7 +55,7 @@ h1, h2 { color: #333; margin-bottom: 20px; }
 .centered-card,
 .timetable-card {
   width: 100vw;
-  min-height: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 16px;
   border-radius: 0;
@@ -79,21 +79,22 @@ h1, h2 { color: #333; margin-bottom: 20px; }
 /* MOBILE / WEBVIEW FIX - Override desktop grid with flexbox for proper centering */
 @media (max-width: 800px) {
   html, body {
-    height: auto;
-    min-height: 100%;
+    height: 100vh;
+    min-height: 100vh;
     min-height: -webkit-fill-available;
   }
   
   #root {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     min-height: 100vh;
+    height: 100vh;
     min-height: -webkit-fill-available;
     width: 100vw;
     overflow-x: hidden;
-    padding: 16px 0;
+    padding: 0;
   }
 
   .centered-card,
@@ -108,8 +109,9 @@ h1, h2 { color: #333; margin-bottom: 20px; }
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 32px);
-    min-height: calc(-webkit-fill-available - 32px);
+    min-height: 100vh;
+    height: 100vh;
+    min-height: -webkit-fill-available;
     place-items: unset;
     text-align: center;
   }
