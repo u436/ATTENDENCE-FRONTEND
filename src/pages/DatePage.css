@@ -40,12 +40,12 @@
   padding: 18px 24px;
   font-size: 18px;
   font-weight: 700;
-  border: 2px solid #fed7aa !important;
+  border: 2px solid #e0f2fe !important;
   border-radius: 16px !important;
-  background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%) !important;
-  color: #c2410c !important;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+  color: #0369a1 !important;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(194, 65, 12, 0.1);
+  box-shadow: 0 4px 12px rgba(3, 105, 161, 0.1);
   transition: all 0.3s ease;
 }
 

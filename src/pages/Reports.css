@@ -20,6 +20,7 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow: visible;
 }
 
 .top-nav-buttons button {
@@ -35,6 +36,8 @@
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
+  overflow: visible !important;
+  min-height: 44px;
 }
 
 .report-heading {

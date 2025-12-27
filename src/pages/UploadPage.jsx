@@ -109,14 +109,26 @@ function UploadPage() {
 		// Replace entire holidayByDay completely (not merging with old values)
 		setHolidayByDay(newHolidays);
 
-		// Now ask for subject count and day mapping
+		// Skip subject config modal and go directly to day selection
 		if (tempSubjects.length > 0) {
 			setPendingSubjects(tempSubjects);
-			// Initialize default period count to 1 for each subject
+			// Set default period count to 1 for each subject (skip asking user)
 			const defaults = Object.fromEntries(tempSubjects.map((s) => [s, 1]));
 			setSubjectDayConfig(defaults);
+			
+			// Initialize day selections - all subjects selected for non-holiday days only
+			const initialDaySelections = {};
+			const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+			dayNames.forEach((dayName) => {
+				// Only initialize if not a holiday
+				if (!selectedHolidays.includes(dayName)) {
+					initialDaySelections[dayName] = [...tempSubjects]; // All subjects selected by default
+				}
+			});
+			setDaySelections(initialDaySelections);
+			setCurrentDayForSelection(0);
 			setShowHolidayModal(false);
-			setShowSubjectConfigModal(true);
+			setShowDaySelectionModal(true);
 		} else {
 			setSetupCompleted(true);
 			setSubjects([]);

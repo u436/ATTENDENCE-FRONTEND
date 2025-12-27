@@ -60,7 +60,7 @@ function DatePage() {
 
   return (
     <div className="centered-card">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", width: "100%", maxWidth: "400px" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%", maxWidth: "400px" }}>
         <h2 style={{ margin: 0, marginBottom: "2px", color: "#1e293b", fontSize: "32px", fontWeight: "700" }}>📅 Select Date</h2>
 
       <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
