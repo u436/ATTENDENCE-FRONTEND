@@ -24,6 +24,13 @@ body.welcome-page, body.other-unwanted-pages {
   padding-top: max(16px, env(safe-area-inset-top, 0));
 }
 
+.upload-page-container h1,
+.upload-page-container h2,
+.upload-page-container h3,
+.upload-page-container p {
+  text-align: center;
+}
+
 /* Top Back button */
 .top-back {
   text-align: left;
