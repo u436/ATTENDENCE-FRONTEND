@@ -531,11 +531,8 @@ function UploadPage() {
 								onChange={(e) => handleSubjectChange(i, e.target.value)}
 								style={{ flex: 1 }}
 								ref={(el) => (subjectInputRefs.current[i] = el)}
-								x-webkit-speech="true"
-								speechRecognition="true"
 								autoComplete="off"
 								autoCorrect="on"
-								spellCheck="false"
 								onKeyDown={(e) => {
 									if (e.key === "Enter" && (e.currentTarget.value || "").trim().length > 0) {
 										// Add a new empty box and focus it immediately without closing keyboard
