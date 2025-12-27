@@ -580,17 +580,17 @@ function UploadPage() {
 					color: "#333"
 				}}>
 					<h3 style={{ marginTop: 0, marginBottom: "16px", color: "#333" }}>Select Holiday Days</h3>
-					<p style={{ fontSize: "14px", color: "#666", marginBottom: "16px" }}>
+					<p style={{ fontSize: "14px", color: "#666", marginBottom: "12px" }}>
 						Select which days of the week are holidays (no classes):
 					</p>
-					<div style={{ marginBottom: "20px", maxHeight: "50vh", overflowY: "auto" }}>
+					<div style={{ marginBottom: "16px" }}>
 						{["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(dayName => (
 							<div key={dayName} style={{ 
 								display: "flex", 
 								alignItems: "center", 
-								gap: "10px", 
-								marginBottom: "10px",
-								padding: "8px",
+								gap: "8px", 
+								marginBottom: "4px",
+								padding: "6px 8px",
 								borderRadius: "6px",
 								backgroundColor: selectedHolidays.includes(dayName) ? "#fff3e0" : "transparent"
 							}}>
@@ -599,14 +599,15 @@ function UploadPage() {
 									id={`holiday-${dayName}`}
 									checked={selectedHolidays.includes(dayName)}
 									onChange={() => handleToggleHolidayDay(dayName)}
-									style={{ width: "18px", height: "18px", cursor: "pointer" }}
+									style={{ width: "16px", height: "16px", cursor: "pointer" }}
 								/>
 								<label 
 									htmlFor={`holiday-${dayName}`} 
 									style={{ 
 										fontWeight: selectedHolidays.includes(dayName) ? "600" : "normal",
 										cursor: "pointer",
-										color: "#333"
+										color: "#333",
+										fontSize: "14px"
 									}}
 								>
 									{dayName}
