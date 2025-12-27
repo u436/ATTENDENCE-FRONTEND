@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
-import { getNotificationTime, setNotificationTime, requestNotificationPermission, scheduleNotification } from "../utils/notifications";
+import { getNotificationTime, setNotificationTime, requestNotificationPermission, scheduleNotification, subscribeToPush, updatePushTime } from "../utils/notifications";
 
 function Settings({ isOpen, onClose }) {
 	const navigate = useNavigate();
@@ -52,14 +52,18 @@ function Settings({ isOpen, onClose }) {
 		if (selectedPeriod === 'AM' && selectedHour === 12) hour24 = 0;
 		const timeString = `${hour24.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}`;
 		
+		// Automatically request permission (browser will show prompt only if needed)
 		const granted = await requestNotificationPermission();
 		if (granted) {
 			setNotificationTime(timeString);
 			scheduleNotification(timeString);
-			alert(`✅ Daily reminder set for ${selectedHour}:${selectedMinute.toString().padStart(2, '0')} ${selectedPeriod}`);
+			// Subscribe/update on backend for push notifications (works even when app closed)
+			await updatePushTime(timeString);
 			setShowNotificationSettings(false);
 		} else {
-			alert("❌ Please enable notifications in your browser settings");
+			// Even if denied, still save locally
+			setNotificationTime(timeString);
+			setShowNotificationSettings(false);
 		}
 	};
 
@@ -264,7 +268,7 @@ function Settings({ isOpen, onClose }) {
 									onClick={handleSaveNotificationTime}
 									style={{
 										padding: "10px 14px",
-										backgroundColor: "#f59e0b",
+										backgroundColor: "#10b981",
 										color: "white",
 										border: "none",
 										borderRadius: "8px",
@@ -273,7 +277,7 @@ function Settings({ isOpen, onClose }) {
 										cursor: "pointer",
 									}}
 								>
-									Save
+									✓ Set
 								</button>
 							</div>
 						</div>
