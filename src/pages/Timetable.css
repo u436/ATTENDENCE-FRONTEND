@@ -109,6 +109,8 @@
 .timetable-card > div > div:has(> table) {
   width: 100% !important;
   overflow-x: visible !important;
+  overflow-y: auto !important;
+  max-height: 60vh;
   box-sizing: border-box !important;
   -webkit-overflow-scrolling: touch;
 }

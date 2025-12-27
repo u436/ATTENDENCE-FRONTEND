@@ -137,6 +137,17 @@ body.welcome-page, body.other-unwanted-pages {
   width: 100%;
   max-width: 900px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 200px);
+}
+
+.subjects-list-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 50vh;
+  padding: 8px 0;
+  margin-bottom: 10px;
 }
 
 .add-subject-section input {

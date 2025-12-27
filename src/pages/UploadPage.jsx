@@ -82,9 +82,16 @@ function UploadPage() {
 			return next;
 		});
 	};
+	
+	// Auto-capitalize: First letter and letter after space
+	const autoCapitalize = (text) => {
+		if (!text) return text;
+		return text.replace(/(^|\s)(\w)/g, (match, space, letter) => space + letter.toUpperCase());
+	};
+	
 	const handleSubjectChange = (index, value) => {
 		const newSubjects = [...subjects];
-		newSubjects[index] = value;
+		newSubjects[index] = autoCapitalize(value);
 		setSubjects(newSubjects);
 	};
 
@@ -514,6 +521,7 @@ function UploadPage() {
 			{option === "add" && (
 				<div className="add-subject-section">
 					<h3>Add Subjects Manually</h3>
+					<div className="subjects-list-container">
 						{subjects.map((subj, i) => (
 						<div key={i} style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center" }}>
 							<input
@@ -523,6 +531,11 @@ function UploadPage() {
 								onChange={(e) => handleSubjectChange(i, e.target.value)}
 								style={{ flex: 1 }}
 								ref={(el) => (subjectInputRefs.current[i] = el)}
+								x-webkit-speech="true"
+								speechRecognition="true"
+								autoComplete="off"
+								autoCorrect="on"
+								spellCheck="false"
 								onKeyDown={(e) => {
 									if (e.key === "Enter" && (e.currentTarget.value || "").trim().length > 0) {
 										// Add a new empty box and focus it immediately without closing keyboard
@@ -538,6 +551,7 @@ function UploadPage() {
 							<button onClick={() => handleRemoveSubjectField(i)} style={{ backgroundColor: "#ff6666" }}>Remove</button>
 						</div>
 					))}
+					</div>
 					<div className="upload-buttons">
 						<button onClick={handleAddSubjectField} tabIndex={-1}>+ Add Subject</button>
 						<button onClick={() => setOption(null)}>← Back</button>
@@ -572,7 +586,7 @@ function UploadPage() {
 					<p style={{ fontSize: "14px", color: "#666", marginBottom: "16px" }}>
 						Select which days of the week are holidays (no classes):
 					</p>
-					<div style={{ marginBottom: "20px" }}>
+					<div style={{ marginBottom: "20px", maxHeight: "50vh", overflowY: "auto" }}>
 						{["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(dayName => (
 							<div key={dayName} style={{ 
 								display: "flex", 
@@ -943,7 +957,7 @@ function UploadPage() {
 								<p style={{ fontSize: "14px", color: "#666", marginBottom: "16px" }}>
 									Select which subjects have classes on {currentDay}:
 								</p>
-								<div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
+								<div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px", maxHeight: "40vh", overflowY: "auto", padding: "4px" }}>
 									{pendingSubjects.map((subject) => (
 										<div key={subject} style={{
 											display: "flex",
