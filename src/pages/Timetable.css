@@ -110,14 +110,15 @@
   margin: 0 !important;
   padding: 0 !important;
   border-collapse: collapse !important;
+  border: 2px solid #999 !important;
 }
 
 .timetable-table th,
 .timetable-table td {
-  padding: 4px !important;
+  padding: 8px 4px !important;
   margin: 0 !important;
-  line-height: 1 !important;
-  border: 1px solid #ddd !important;
+  line-height: 1.2 !important;
+  border: 1px solid #999 !important;
 }
 
 .subject-badge {
@@ -167,73 +168,55 @@
   }
 
   /* Timetable table - make it fit perfectly */
-  .timetable-card table {
+  .timetable-table {
     width: 100% !important;
     max-width: 100% !important;
     display: table !important;
     border-collapse: collapse !important;
     table-layout: fixed !important;
-    font-size: 12px !important;
+    font-size: 0.8rem !important;
     margin: 0 !important;
+    border: 2px solid #999 !important;
   }
 
-  .timetable-card table th,
-  .timetable-card table td {
-    padding: 6px 4px !important;
-    font-size: 11px !important;
+  .timetable-table th,
+  .timetable-table td {
+    padding: 8px 3px !important;
+    font-size: 0.75rem !important;
     word-wrap: break-word;
     white-space: normal;
-    border: 1px solid #ddd !important;
+    border: 1px solid #999 !important;
   }
 
   /* Column widths for mobile */
-  .timetable-card table th:nth-child(1),
-  .timetable-card table td:nth-child(1) {
-    width: 12% !important;
-  }
+  .timetable-table col:nth-child(1) { width: 10% !important; }
+  .timetable-table col:nth-child(2) { width: 18% !important; }
+  .timetable-table col:nth-child(3) { width: 36% !important; }
+  .timetable-table col:nth-child(4) { width: 36% !important; }
 
-  .timetable-card table th:nth-child(2),
-  .timetable-card table td:nth-child(2) {
-    width: 15% !important;
-    font-size: 10px !important;
-  }
-
-  .timetable-card table th:nth-child(3),
-  .timetable-card table td:nth-child(3) {
-    width: 35% !important;
-  }
-
-  .timetable-card table th:nth-child(4),
-  .timetable-card table td:nth-child(4) {
-    width: 38% !important;
-  }
-
-  /* Status buttons */
-  .timetable-card table td:nth-child(4) {
-    padding: 4px 2px !important;
+  /* Status column - keep buttons horizontal and compact */
+  .timetable-table td:nth-child(4) > div {
     display: flex !important;
     flex-direction: row !important;
-    align-items: center !important;
+    gap: 3px !important;
     justify-content: center !important;
-    gap: 6px !important;
+    align-items: center !important;
   }
 
-  .timetable-card table td button {
-    padding: 5px 6px !important;
-    font-size: 10px !important;
-    margin: 1px !important;
+  .timetable-table td:nth-child(4) button {
+    padding: 5px 4px !important;
+    font-size: 0.7rem !important;
+    flex: 1 !important;
     min-width: 0 !important;
-    width: auto !important;
-    display: inline-block !important;
+    white-space: nowrap !important;
   }
 
   /* Attendance percentage circle */
   .attendance-circle {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 9px !important;
-    line-height: 28px !important;
-    margin-left: 4px !important;
+    min-width: 32px !important;
+    height: 24px !important;
+    font-size: 0.65rem !important;
+    padding: 0 4px !important;
   }
 
   /* Mark as Holiday button */
@@ -289,45 +272,37 @@
     padding: 4px !important;
   }
 
-  /* Hide S.No column on very small screens */
-  .timetable-card table th:first-child,
-  .timetable-card table td:first-child {
-    display: none !important;
-  }
-
-  /* Adjust remaining columns */
-  .timetable-card table th:nth-child(2),
-  .timetable-card table td:nth-child(2) {
-    width: 20% !important;
-  }
-
-  .timetable-card table th:nth-child(3),
-  .timetable-card table td:nth-child(3) {
-    width: 40% !important;
-  }
-
-  .timetable-card table th:nth-child(4),
-  .timetable-card table td:nth-child(4) {
-    width: 40% !important;
-  }
-
   .date-day-display span {
     font-size: 13px;
   }
 
-  /* Stack Present/Absent buttons vertically */
-  .timetable-card table td:nth-child(4) {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 3px !important;
-    padding: 4px 2px !important;
+  /* Adjust column widths for very small screens */
+  .timetable-table col:nth-child(1) { width: 12% !important; }
+  .timetable-table col:nth-child(2) { width: 18% !important; }
+  .timetable-table col:nth-child(3) { width: 35% !important; }
+  .timetable-table col:nth-child(4) { width: 35% !important; }
+
+  .timetable-table th,
+  .timetable-table td {
+    padding: 6px 2px !important;
+    font-size: 0.7rem !important;
   }
 
-  .timetable-card table td:nth-child(4) button {
+  /* Stack Present/Absent buttons vertically on very small screens */
+  .timetable-table td:nth-child(4) > div {
+    flex-direction: column !important;
+    gap: 2px !important;
+  }
+
+  .timetable-table td:nth-child(4) button {
     width: 100% !important;
-    margin: 0 !important;
-    padding: 6px 4px !important;
+    padding: 5px 3px !important;
+    font-size: 0.65rem !important;
+  }
+
+  .attendance-circle {
+    min-width: 28px !important;
+    height: 20px !important;
+    font-size: 0.6rem !important;
   }
 }

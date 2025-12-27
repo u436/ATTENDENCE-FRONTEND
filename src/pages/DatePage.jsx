@@ -60,14 +60,15 @@ function DatePage() {
 
   return (
     <div className="centered-card">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", width: "100%", maxWidth: "400px" }}>
-        <h2 style={{ margin: 0, marginBottom: "8px" }}>Enter Date and Day</h2>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", width: "100%", maxWidth: "400px" }}>
+        <h2 style={{ margin: 0, marginBottom: "2px", color: "#1e293b", fontSize: "32px", fontWeight: "700" }}>📅 Select Date</h2>
 
-      <DatePicker
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <DatePicker
         selected={selectedDate}
         onChange={(date) => setSelectedDate(date)}
         dateFormat="yyyy-MM-dd"
-        placeholderText="Select a date"
+        placeholderText="Tap to select date"
         className="custom-datepicker"
         inputMode="none"
         scrollableYearDropdown
@@ -126,21 +127,46 @@ function DatePage() {
 }}
 
       />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Day (Monday)"
-        value={localDay || ""}
-        readOnly
-        inputMode="none"
-        tabIndex={-1}
-        className="day-input"
-        style={{ width: "100%", maxWidth: "400px" }}
-      />
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <input
+          type="text"
+          placeholder="Day will appear here"
+          value={localDay || ""}
+          readOnly
+          inputMode="none"
+          tabIndex={-1}
+          className="day-input"
+        />
+      </div>
 
-      <div className="button-row" style={{ display: "flex", gap: "8px", width: "100%", maxWidth: "400px", justifyContent: "center" }}>
-        <button style={{ flex: 1, minWidth: "100px", maxWidth: "180px" }} onClick={() => navigate("/", { replace: true })}>← Back</button>
-        <button style={{ flex: 1, minWidth: "100px", maxWidth: "180px" }} onClick={handleNext}>Next →</button>
+      <div className="button-row" style={{ display: "flex", gap: "16px", width: "100%", maxWidth: "320px", justifyContent: "center", marginTop: "12px" }}>
+        <button style={{ 
+          flex: 1, 
+          padding: "16px 24px", 
+          fontSize: "16px", 
+          fontWeight: "600", 
+          borderRadius: "14px", 
+          border: "none", 
+          backgroundColor: "#e2e8f0", 
+          color: "#475569",
+          cursor: "pointer",
+          transition: "all 0.2s"
+        }} onClick={() => navigate("/", { replace: true })}>← Back</button>
+        <button style={{ 
+          flex: 1, 
+          padding: "16px 24px", 
+          fontSize: "16px", 
+          fontWeight: "600", 
+          borderRadius: "14px", 
+          border: "none", 
+          backgroundColor: "#2196F3", 
+          color: "white",
+          cursor: "pointer",
+          boxShadow: "0 4px 14px rgba(33, 150, 243, 0.35)",
+          transition: "all 0.2s"
+        }} onClick={handleNext}>Next →</button>
       </div>
       </div>
     </div>

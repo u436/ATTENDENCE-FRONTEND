@@ -1,15 +1,28 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import "./UploadPage.css";
 
 function UploadPage() {
   const { date, day } = useContext(AppContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check if coming from Settings (changing timetable) - should start fresh
+  const clearTimetable = location.state?.clearTimetable || false;
 
   const [option, setOption] = useState(null); // "upload" or "add"
   const [subjects, setSubjects] = useState([]);
   const [file, setFile] = useState(null);
+  
+  // Clear subjects when coming from Settings to change timetable
+  useEffect(() => {
+    if (clearTimetable) {
+      setSubjects([]);
+      setFile(null);
+      setOption(null);
+    }
+  }, [clearTimetable]);
 
   if (!date || !day) return <p>Please select date and day first.</p>;
 

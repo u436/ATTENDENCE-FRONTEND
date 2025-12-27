@@ -5,21 +5,41 @@ import UploadPage from "./pages/UploadPage";
 import Landing from "./pages/Landing";
 import Timetable from "./pages/Timetable";
 import Reports from "./pages/Reports";
-import { requestNotificationPermission, scheduleNotification } from "./utils/notifications";
+import { requestNotificationPermission, scheduleNotification, isNotificationEnabled, getNotificationTime, registerServiceWorker } from "./utils/notifications";
 
 function App() {
   useEffect(() => {
-    // Request notification permission on app load
+    console.log('🚀 App mounted - Initializing notifications...');
+    
+    // Register service worker for better mobile notification support
+    registerServiceWorker();
+    
+    // Initialize notifications if previously enabled
     const initNotifications = async () => {
-      const granted = await requestNotificationPermission();
-      if (granted) {
-        // Schedule daily notifications
-        const intervalId = scheduleNotification();
-        return () => clearInterval(intervalId);
+      // Check if user previously enabled notifications
+      if (isNotificationEnabled()) {
+        console.log('ℹ️ Notifications were previously enabled');
+        const savedTime = getNotificationTime();
+        console.log('⏰ Saved notification time:', savedTime);
+        
+        // Check if permission is still granted
+        if ('Notification' in window && Notification.permission === 'granted') {
+          console.log('✅ Permission already granted, starting scheduler');
+          scheduleNotification(savedTime);
+        } else {
+          console.log('ℹ️ Permission not granted, will request when user enables notifications');
+        }
+      } else {
+        console.log('ℹ️ Notifications not enabled yet');
       }
     };
     
     initNotifications();
+    
+    // Cleanup interval on unmount
+    return () => {
+      console.log('🧹 App unmounting - cleaning up');
+    };
   }, []);
 
   return (

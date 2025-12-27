@@ -732,7 +732,7 @@ function UploadPage() {
 					flexDirection: "column",
 					overflow: "hidden"
 				}}>
-					<h3 style={{ marginTop: 0, marginBottom: "8px", color: "#1976d2", fontSize: "20px", fontWeight: "700" }}>
+					<h3 style={{ marginTop: 0, marginBottom: "8px", color: "#2E7D32", fontSize: "20px", fontWeight: "700" }}>
 						📚 How many periods per subject?
 					</h3>
 					<p style={{ fontSize: "12px", color: "#666", marginBottom: "16px", lineHeight: "1.5" }}>
@@ -749,9 +749,9 @@ function UploadPage() {
 									flexWrap: "wrap",
 									justifyContent: "space-between",
 									padding: "4px 6px",
-									backgroundColor: "#f4e8d0",
+									backgroundColor: "#E8F5E9",
 									borderRadius: "8px",
-									border: "1.5px solid #d4b896",
+									border: "1.5px solid #81C784",
 									transition: "all 0.2s ease",
 									minHeight: "28px"
 								}}
@@ -760,7 +760,7 @@ function UploadPage() {
 									minWidth: "80px",
 									flex: "1 1 100px",
 									fontWeight: 600,
-									color: "#1976d2",
+									color: "#2E7D32",
 									fontSize: "12px"
 								}}>
 									{subject}:
@@ -790,10 +790,10 @@ function UploadPage() {
 										textAlign: "center", 
 										fontSize: "12px",
 										fontWeight: "600",
-										border: "2px solid #1976d2",
+										border: "2px solid #2E7D32",
 										borderRadius: "6px",
 										backgroundColor: "#fff",
-										color: "#1976d2",
+										color: "#2E7D32",
 										outline: "none",
 										transition: "all 0.2s ease",
 										appearance: "auto",
@@ -802,11 +802,11 @@ function UploadPage() {
 										cursor: "default"
 									}}
 									onFocus={(e) => {
-										e.target.style.borderColor = "#1565c0";
-										e.target.style.boxShadow = "0 0 0 3px rgba(25, 118, 210, 0.1)";
+										e.target.style.borderColor = "#1B5E20";
+										e.target.style.boxShadow = "0 0 0 3px rgba(46, 125, 50, 0.1)";
 									}}
 									onBlur={(e) => {
-										e.target.style.borderColor = "#1976d2";
+										e.target.style.borderColor = "#2E7D32";
 										e.target.style.boxShadow = "none";
 									}}
 								/>

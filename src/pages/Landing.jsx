@@ -80,53 +80,62 @@ function Landing() {
           <button 
             onClick={handleContinue}
             style={{ 
-              backgroundColor: "#2196F3",
+              backgroundColor: "#4CAF50",
               color: "white",
-              padding: "10px 20px",
+              padding: "12px 24px",
               border: "none",
               borderRadius: "10px",
               cursor: "pointer",
               fontWeight: 600,
               width: "min(95vw, 320px)",
-              minWidth: "200px"
+              minWidth: "200px",
+              fontSize: "1.1rem"
             }}
           >
-            Continue →
+            📅 Open Today's Timetable
           </button>
           <button 
             onClick={handleStartFresh}
             style={{ 
-              backgroundColor: "#2196F3",
+              backgroundColor: "#f44336",
               color: "white",
-              padding: "10px 20px",
+              padding: "12px 24px",
               border: "none",
               borderRadius: "10px",
               cursor: "pointer",
               fontWeight: 600,
               width: "min(95vw, 320px)",
-              minWidth: "200px"
+              minWidth: "200px",
+              fontSize: "1rem"
             }}
           >
-            Start New Timetable →
+            🔄 Start New Timetable
           </button>
+          <p style={{ fontSize: "0.85rem", color: "#666", marginTop: "10px", textAlign: "center" }}>
+            Use Settings (⚙️) in timetable page to change date or edit subjects
+          </p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%" }}>
+          <p style={{ fontSize: "1rem", color: "#333", marginBottom: "10px", textAlign: "center" }}>
+            Welcome! Let's set up your timetable.
+          </p>
           <button 
             onClick={handleContinueSetup}
             style={{ 
               backgroundColor: "#2196F3",
               color: "white",
-              padding: "10px 20px",
+              padding: "12px 24px",
               border: "none",
               borderRadius: "10px",
               cursor: "pointer",
               fontWeight: 600,
               width: "min(95vw, 320px)",
-              minWidth: "200px"
+              minWidth: "200px",
+              fontSize: "1.1rem"
             }}
           >
-            Continue →
+            🚀 Get Started
           </button>
         </div>
       )}

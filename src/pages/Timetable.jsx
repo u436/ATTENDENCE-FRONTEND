@@ -367,23 +367,29 @@ function Timetable() {
         
           {displayedTimetable.length > 0 && (
             <div style={{ width: "100%", maxWidth: "100%", overflowX: "auto", boxSizing: "border-box", WebkitOverflowScrolling: "touch" }}>
-            <table style={{ borderCollapse: "collapse", width: "100%", minWidth: "100%", margin: "0", fontSize: "1rem", lineHeight: "1.4", tableLayout: "fixed" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%", minWidth: "100%", margin: "0", fontSize: "0.9rem", lineHeight: "1.2", tableLayout: "fixed", border: "2px solid #999" }} className="timetable-table">
+              <colgroup>
+                <col style={{ width: "10%" }} />
+                <col style={{ width: "20%" }} />
+                <col style={{ width: "35%" }} />
+                <col style={{ width: "35%" }} />
+              </colgroup>
               <thead>
-                <tr style={{ backgroundColor: "#f5f5f5" }}>
-                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>S.No</th>
-                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>Time</th>
-                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>Subject</th>
-                  <th style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontWeight: "600", fontSize: "0.95rem" }}>Status</th>
+                <tr style={{ backgroundColor: "#2196F3" }}>
+                  <th style={{ padding: "10px 4px", border: "1px solid #1976d2", textAlign: "center", fontWeight: "700", fontSize: "0.85rem", color: "white" }}>S.No</th>
+                  <th style={{ padding: "10px 4px", border: "1px solid #1976d2", textAlign: "center", fontWeight: "700", fontSize: "0.85rem", color: "white" }}>Time</th>
+                  <th style={{ padding: "10px 4px", border: "1px solid #1976d2", textAlign: "center", fontWeight: "700", fontSize: "0.85rem", color: "white" }}>Subject</th>
+                  <th style={{ padding: "10px 4px", border: "1px solid #1976d2", textAlign: "center", fontWeight: "700", fontSize: "0.85rem", color: "white" }}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {displayedTimetable.map((cls, idx) => (
                   <tr key={idx}>
-                  <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center" }}>{cls.sno}</td>
-                  <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center", fontSize: "0.85rem" }}>{cls.time || '-'}</td>
-                  <td style={{ padding: "8px 4px", border: "1px solid #ddd", textAlign: "center" }}>
+                  <td style={{ padding: "8px 4px", border: "1px solid #999", textAlign: "center" }}>{cls.sno}</td>
+                  <td style={{ padding: "8px 4px", border: "1px solid #999", textAlign: "center", fontSize: "0.75rem" }}>{cls.time || '-'}</td>
+                  <td style={{ padding: "8px 4px", border: "1px solid #999", textAlign: "center" }}>
                     <div className="subject-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", flexWrap: "nowrap", maxWidth: "100%" }}>
-                      <span style={{ display: "inline-block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "160px" }}>
+                      <span style={{ display: "inline-block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "140px" }}>
                         {cls.subject && cls.subject.length > 1 ? cls.subject : `Period ${cls.sno ?? idx + 1}`}
                       </span>
                       <span
@@ -393,56 +399,63 @@ function Timetable() {
                           display: "inline-flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          minWidth: "40px",
-                          height: "32px",
-                          padding: "0 6px",
-                          borderRadius: "16px",
+                          minWidth: "38px",
+                          height: "28px",
+                          padding: "0 5px",
+                          borderRadius: "14px",
                           background: "#ffffff",
                           color: "#ff9800",
                           fontWeight: "bold",
-                          fontSize: "12px",
+                          fontSize: "11px",
                           lineHeight: "1",
                           textAlign: "center",
                           whiteSpace: "nowrap",
-                          border: "1px solid #eee",
+                          border: "1px solid #ddd",
                         }}
                       >
                         {subjectAttendance[cls.subject] ?? 0}%
                       </span>
                     </div>
                   </td>
-                  <td style={{ padding: "6px 2px", border: "1px solid #ddd", textAlign: "center" }}>
-                    <button 
-                      onClick={() => handleStatusClick(idx, "present")}
-                      style={{
-                        padding: "7px 10px",
-                        fontSize: "0.85rem",
-                        backgroundColor: cls.status === 'present' ? '#4CAF50' : '',
-                        color: cls.status === 'present' ? 'white' : '',
-                        opacity: 1,
-                        cursor: 'pointer',
-                        border: "1px solid #ccc",
-                        borderRadius: "2px",
-                        marginRight: "2px"
-                      }}
-                    >
-                      Present
-                    </button>
-                    <button 
-                      onClick={() => handleStatusClick(idx, "absent")}
-                      style={{
-                        padding: "7px 10px",
-                        fontSize: "0.85rem",
-                        backgroundColor: cls.status === 'absent' ? '#f44336' : '',
-                        color: cls.status === 'absent' ? 'white' : '',
-                        opacity: 1,
-                        cursor: 'pointer',
-                        border: "1px solid #ccc",
-                        borderRadius: "2px"
-                      }}
-                    >
-                      Absent
-                    </button>
+                  <td style={{ padding: "4px 2px", border: "1px solid #999", textAlign: "center" }}>
+                    <div style={{ display: "flex", gap: "4px", justifyContent: "center", alignItems: "center", flexWrap: "nowrap" }}>
+                      <button 
+                        onClick={() => handleStatusClick(idx, "present")}
+                        style={{
+                          padding: "6px 8px",
+                          fontSize: "0.75rem",
+                          backgroundColor: cls.status === 'present' ? '#4CAF50' : '#2196F3',
+                          color: 'white',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          border: cls.status === 'present' ? "1px solid #2e7d32" : "1px solid #1976d2",
+                          borderRadius: "3px",
+                          flex: "1",
+                          minWidth: "0",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        Present
+                      </button>
+                      <button 
+                        onClick={() => handleStatusClick(idx, "absent")}
+                        style={{
+                          padding: "6px 8px",
+                          fontSize: "0.75rem",
+                          backgroundColor: cls.status === 'absent' ? '#f44336' : '#2196F3',
+                          color: 'white',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          border: cls.status === 'absent' ? "1px solid #c62828" : "1px solid #1976d2",
+                          borderRadius: "3px",
+                          flex: "1",
+                          minWidth: "0",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        Absent
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -461,7 +474,7 @@ function Timetable() {
             </div>
           )}
           {isFutureDate && (
-            <div style={{ padding: "8px", border: "1px dashed #90caf9", borderRadius: "8px", background: "#e3f2fd", color: "#1565c0", fontWeight: "600", fontSize: "0.9rem", marginBottom: "8px" }}>
+            <div style={{ padding: "8px", border: "1px dashed #90caf9", borderRadius: "8px", background: "#e3f2fd", color: "#1976d2", fontWeight: "600", fontSize: "0.9rem", marginBottom: "8px" }}>
               Future date selected — attendance actions are disabled.
             </div>
           )}
@@ -491,7 +504,7 @@ function Timetable() {
     {showOverrideModal && (
       <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
         <div style={{ backgroundColor: "white", padding: "28px", borderRadius: "12px", minWidth: "420px", maxWidth: "90%", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} className="override-modal-content">
-          <h3 style={{ marginTop: 0, marginBottom: "12px", color: "#1976d2", fontSize: "22px" }}>📅 Select Timetable to Apply</h3>
+          <h3 style={{ marginTop: 0, marginBottom: "12px", color: "#2196F3", fontSize: "22px" }}>📅 Select Timetable to Apply</h3>
           <p style={{ color: "#555", marginBottom: "20px", fontSize: "14px", lineHeight: "1.5" }}>
             This date was marked as a holiday. Choose a normal weekday timetable to use for this date.
           </p>
@@ -504,7 +517,7 @@ function Timetable() {
                   alignItems: "center",
                   padding: "12px 16px",
                   borderRadius: "8px",
-                  border: selectedOverrideDay === d ? "2px solid #1976d2" : "2px solid #e0e0e0",
+                  border: selectedOverrideDay === d ? "2px solid #2196F3" : "2px solid #e0e0e0",
                   backgroundColor: selectedOverrideDay === d ? "#e3f2fd" : "#fafafa",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
@@ -529,9 +542,9 @@ function Timetable() {
                   value={d} 
                   checked={selectedOverrideDay === d} 
                   onChange={(e) => setSelectedOverrideDay(e.target.value)}
-                  style={{ width: "20px", height: "20px", marginRight: "12px", cursor: "pointer", accentColor: "#1976d2" }}
+                  style={{ width: "20px", height: "20px", marginRight: "12px", cursor: "pointer", accentColor: "#2196F3" }}
                 />
-                <span style={{ fontSize: "16px", color: selectedOverrideDay === d ? "#1976d2" : "#333" }}>{d}</span>
+                <span style={{ fontSize: "16px", color: selectedOverrideDay === d ? "#2196F3" : "#333" }}>{d}</span>
               </label>
             ))}
             {availableOverrideDays.length === 0 && (
