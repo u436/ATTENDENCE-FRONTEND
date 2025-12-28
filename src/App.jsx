@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DatePage from "./pages/DatePage";
 import UploadPage from "./pages/UploadPage";
 import Landing from "./pages/Landing";
@@ -7,8 +7,18 @@ import Timetable from "./pages/Timetable";
 import Reports from "./pages/Reports";
 import { requestNotificationPermission, scheduleNotification, isNotificationEnabled, getNotificationTime, registerServiceWorker, subscribeToPush } from "./utils/notifications";
 
+function isAndroidWebView() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  // Android WebView usually has 'wv' or 'Android' and 'Version/' in UA
+  return (/; wv\)/.test(ua) || (/(Android).*(Version\/)/i).test(ua));
+}
+
 function App() {
+  const [webviewWarning, setWebviewWarning] = useState(false);
   useEffect(() => {
+    if (isAndroidWebView()) {
+      setWebviewWarning(true);
+    }
     console.log('🚀 App mounted - Initializing notifications...');
     
     // Register service worker for better mobile notification support
@@ -58,13 +68,17 @@ function App() {
 
   return (
     <div className="center-screen">
+      {webviewWarning && (
+        <div style={{background:'#fffbe6',color:'#b26d00',padding:'16px',border:'1px solid #ffe58f',borderRadius:8,marginBottom:16,maxWidth:400}}>
+          <b>Notice:</b> You are running in an Android WebView. Some features (like push notifications and offline support) may not work. For best experience, use Chrome or Add to Home Screen.
+        </div>
+      )}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/date" element={<DatePage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/timetable" element={<Timetable />} />
         <Route path="/reports" element={<Reports />} />
-
         {/* Add other routes here if needed */}
       </Routes>
     </div>
