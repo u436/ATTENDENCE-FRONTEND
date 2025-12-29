@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yourdomain.com/</loc>
+    <loc>https://attendence-frontend-2.onrender.com/</loc>
   </url>
   <url>
-    <loc>https://yourdomain.com/timetable</loc>
+    <loc>https://attendence-frontend-2.onrender.com/timetable</loc>
   </url>
   <url>
-    <loc>https://yourdomain.com/reports</loc>
+    <loc>https://attendence-frontend-2.onrender.com/reports</loc>
   </url>
   <url>
-    <loc>https://yourdomain.com/upload</loc>
+    <loc>https://attendence-frontend-2.onrender.com/upload</loc>
   </url>
   <url>
-    <loc>https://yourdomain.com/settings</loc>
+    <loc>https://attendence-frontend-2.onrender.com/settings</loc>
   </url>
   <url>
-    <loc>https://yourdomain.com/date</loc>
+    <loc>https://attendence-frontend-2.onrender.com/date</loc>
   </url>
   <url>
-    <loc>https://yourdomain.com/error</loc>
+    <loc>https://attendence-frontend-2.onrender.com/error</loc>
   </url>
 </urlset>
