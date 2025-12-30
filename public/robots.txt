@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://attendence-frontend-2.onrender.com/sitemap.xml
